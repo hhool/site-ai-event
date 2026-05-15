@@ -98,6 +98,8 @@ pnpm format:check
 
 ## Maintenance Automation
 
+- Operations index (EN): [docs/ways-of-work/operations/index.md](docs/ways-of-work/operations/index.md)
+- Operations index (ZH): [docs/ways-of-work/operations/index.zh.md](docs/ways-of-work/operations/index.zh.md)
 - Stale workflow: [.github/workflows/stale.yml](.github/workflows/stale.yml)
   - Marks inactive issues/PRs as stale after 21 days
   - Closes stale issues/PRs after 7 more days of inactivity
