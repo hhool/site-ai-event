@@ -119,6 +119,8 @@ pnpm format:check
 - Weekly ops report template (ZH): [docs/ways-of-work/operations/weekly-ops-report-template.zh.md](docs/ways-of-work/operations/weekly-ops-report-template.zh.md)
 - Post-release 24h checklist (EN): [docs/ways-of-work/operations/post-release-24h-checklist.md](docs/ways-of-work/operations/post-release-24h-checklist.md)
 - Post-release 24h checklist (ZH): [docs/ways-of-work/operations/post-release-24h-checklist.zh.md](docs/ways-of-work/operations/post-release-24h-checklist.zh.md)
+- Monthly stability report template (EN): [docs/ways-of-work/operations/monthly-stability-report-template.md](docs/ways-of-work/operations/monthly-stability-report-template.md)
+- Monthly stability report template (ZH): [docs/ways-of-work/operations/monthly-stability-report-template.zh.md](docs/ways-of-work/operations/monthly-stability-report-template.zh.md)
 
 ## Release Automation
 
