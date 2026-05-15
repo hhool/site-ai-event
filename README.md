@@ -55,9 +55,21 @@ pnpm test:e2e
 ## Repository Automation
 
 - Dependabot config: [.github/dependabot.yml](.github/dependabot.yml)
-	- Weekly npm dependency updates
+  - Weekly npm dependency updates
 - Code scanning workflow: [.github/workflows/codeql.yml](.github/workflows/codeql.yml)
-	- Runs on push, pull request, and weekly schedule
+  - Runs on push, pull request, and weekly schedule
+
+## Collaboration Templates
+
+- Bug report template: [.github/ISSUE_TEMPLATE/bug_report.yml](.github/ISSUE_TEMPLATE/bug_report.yml)
+- Feature request template: [.github/ISSUE_TEMPLATE/feature_request.yml](.github/ISSUE_TEMPLATE/feature_request.yml)
+- Pull request template: [.github/pull_request_template.md](.github/pull_request_template.md)
+
+## Release Automation
+
+- Workflow file: [.github/workflows/release.yml](.github/workflows/release.yml)
+- Trigger: push a tag like `v1.0.0`
+- Output: automatic GitHub Release with generated notes and source archive artifact
 
 ## Content Convention
 
