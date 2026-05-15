@@ -113,6 +113,8 @@ pnpm format:check
   - Maintains a rolling draft release from merged PRs
 - Draft config: [.github/release-drafter.yml](.github/release-drafter.yml)
   - Groups changelog entries by labels (frontend/docs/ci/config/dependencies)
+- Release runbook (EN): [docs/ways-of-work/release/release-runbook.md](docs/ways-of-work/release/release-runbook.md)
+- Release runbook (ZH): [docs/ways-of-work/release/release-runbook.zh.md](docs/ways-of-work/release/release-runbook.zh.md)
 
 ## Content Convention
 
