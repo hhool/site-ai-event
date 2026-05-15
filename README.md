@@ -103,6 +103,8 @@ pnpm format:check
   - Applies labels automatically based on changed files via [.github/labeler.yml](.github/labeler.yml)
 - PR description check workflow: [.github/workflows/pr-body-check.yml](.github/workflows/pr-body-check.yml)
   - Ensures required PR template sections are present
+- On-call playbook (EN): [docs/ways-of-work/operations/oncall-playbook.md](docs/ways-of-work/operations/oncall-playbook.md)
+- On-call playbook (ZH): [docs/ways-of-work/operations/oncall-playbook.zh.md](docs/ways-of-work/operations/oncall-playbook.zh.md)
 
 ## Release Automation
 
