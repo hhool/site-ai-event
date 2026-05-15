@@ -65,7 +65,15 @@ pnpm test:e2e
 
 - Bug report template: [.github/ISSUE_TEMPLATE/bug_report.yml](.github/ISSUE_TEMPLATE/bug_report.yml)
 - Feature request template: [.github/ISSUE_TEMPLATE/feature_request.yml](.github/ISSUE_TEMPLATE/feature_request.yml)
+- Issue template config: [.github/ISSUE_TEMPLATE/config.yml](.github/ISSUE_TEMPLATE/config.yml)
+  - Disables blank issues and provides guided contact links
 - Pull request template: [.github/pull_request_template.md](.github/pull_request_template.md)
+
+## Maintenance Automation
+
+- Stale workflow: [.github/workflows/stale.yml](.github/workflows/stale.yml)
+  - Marks inactive issues/PRs as stale after 21 days
+  - Closes stale issues/PRs after 7 more days of inactivity
 
 ## Release Automation
 
