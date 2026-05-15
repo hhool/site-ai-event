@@ -91,6 +91,10 @@ pnpm format:check
   - Validates commit messages on pull requests
 - Commitlint rules: [commitlint.config.cjs](commitlint.config.cjs)
   - Uses Conventional Commits via `@commitlint/config-conventional`
+- PR labeler workflow: [.github/workflows/pr-labeler.yml](.github/workflows/pr-labeler.yml)
+  - Applies labels automatically based on changed files via [.github/labeler.yml](.github/labeler.yml)
+- PR description check workflow: [.github/workflows/pr-body-check.yml](.github/workflows/pr-body-check.yml)
+  - Ensures required PR template sections are present
 
 ## Release Automation
 

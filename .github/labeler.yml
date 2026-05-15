@@ -1,0 +1,21 @@
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: 'src/**'
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file: 'README.md'
+      - any-glob-to-any-file: 'docs/**'
+      - any-glob-to-any-file: 'plan/**'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/**'
+
+config:
+  - changed-files:
+      - any-glob-to-any-file: '*.json'
+      - any-glob-to-any-file: '*.yaml'
+      - any-glob-to-any-file: '*.yml'
+      - any-glob-to-any-file: '*.mjs'
+      - any-glob-to-any-file: '*.cjs'
