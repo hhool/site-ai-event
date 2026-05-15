@@ -647,5 +647,4 @@ export const years = [2025, 2024, 2023] as const;
 export const getToolsByYear = (year: 2023 | 2024 | 2025) =>
   tools.filter((tool) => tool.year === year);
 
-export const getToolBySlug = (slug: string) =>
-  tools.find((tool) => tool.slug === slug);
+export const getToolBySlug = (slug: string) => tools.find((tool) => tool.slug === slug);

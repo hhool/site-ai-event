@@ -64,39 +64,39 @@ graph TB
 
 ### Features
 
-| # | Feature | Description |
-|---|---|---|
-| F1 | List Page | Year tabs + category filter + tool card grid (3-col / 2-col / 1-col responsive) |
-| F2 | Tool Detail Page | 4 series sections + bilingual + SEO metadata + related tools at bottom |
-| F3 | Chinese/English Bilingual | `/zh/` & `/en/` route separation, `next-intl` driven, ZH/EN switcher |
-| F4 | Grand Visual System | Deep black background + glow Hero + frosted-glass cards + Framer Motion stagger |
-| F5 | Full SEO Coverage | Per-page metadata, hreflang, og:image, lang attribute |
+| #   | Feature                   | Description                                                                     |
+| --- | ------------------------- | ------------------------------------------------------------------------------- |
+| F1  | List Page                 | Year tabs + category filter + tool card grid (3-col / 2-col / 1-col responsive) |
+| F2  | Tool Detail Page          | 4 series sections + bilingual + SEO metadata + related tools at bottom          |
+| F3  | Chinese/English Bilingual | `/zh/` & `/en/` route separation, `next-intl` driven, ZH/EN switcher            |
+| F4  | Grand Visual System       | Deep black background + glow Hero + frosted-glass cards + Framer Motion stagger |
+| F5  | Full SEO Coverage         | Per-page metadata, hreflang, og:image, lang attribute                           |
 
 ### Technical Enablers
 
-| Enabler | Purpose |
-|---|---|
-| `next-intl` | App Router i18n with middleware-based route dispatch |
-| `framer-motion` | Card stagger entry, tab transitions, detail page section scroll-in |
-| `lucide-react` | GitHub / external link / star SVG icons |
-| `next/font` | Geist + Inter fonts loaded locally, avoiding external CDN |
-| `generateStaticParams()` | Pre-generate all `/tool/[slug]` static pages, zero runtime |
+| Enabler                  | Purpose                                                            |
+| ------------------------ | ------------------------------------------------------------------ |
+| `next-intl`              | App Router i18n with middleware-based route dispatch               |
+| `framer-motion`          | Card stagger entry, tab transitions, detail page section scroll-in |
+| `lucide-react`           | GitHub / external link / star SVG icons                            |
+| `next/font`              | Geist + Inter fonts loaded locally, avoiding external CDN          |
+| `generateStaticParams()` | Pre-generate all `/tool/[slug]` static pages, zero runtime         |
 
 ---
 
 ## 4. Technology Stack
 
-| Layer | Technology | Version |
-|---|---|---|
-| Framework | Next.js | 15.x (App Router) |
-| Language | TypeScript | 5.x |
-| Styling | TailwindCSS | 3.x |
-| Internationalization | next-intl | 3.x |
-| Animation | framer-motion | 11.x |
-| Icons | lucide-react | latest |
-| Font | next/font (Geist + Inter) | built-in |
-| Deployment | Vercel | Static Export / ISR |
-| Package Manager | pnpm | 9.x |
+| Layer                | Technology                | Version             |
+| -------------------- | ------------------------- | ------------------- |
+| Framework            | Next.js                   | 15.x (App Router)   |
+| Language             | TypeScript                | 5.x                 |
+| Styling              | TailwindCSS               | 3.x                 |
+| Internationalization | next-intl                 | 3.x                 |
+| Animation            | framer-motion             | 11.x                |
+| Icons                | lucide-react              | latest              |
+| Font                 | next/font (Geist + Inter) | built-in            |
+| Deployment           | Vercel                    | Static Export / ISR |
+| Package Manager      | pnpm                      | 9.x                 |
 
 ---
 
@@ -108,11 +108,11 @@ graph TB
 
 ## 6. T-Shirt Size Estimate
 
-| Area | Size | Notes |
-|---|---|---|
-| Data population (30 tools, bilingual full detail) | XL | Largest content volume, AI-assisted |
-| List page development | M | Standard card grid + filter logic |
-| Detail page development | M | 4-section components + routing + SEO |
-| Internationalisation setup | S | Standard next-intl configuration |
-| Visual system (Hero + animations) | M | CSS + Framer Motion |
-| **Total** | **L** | — |
+| Area                                              | Size  | Notes                                |
+| ------------------------------------------------- | ----- | ------------------------------------ |
+| Data population (30 tools, bilingual full detail) | XL    | Largest content volume, AI-assisted  |
+| List page development                             | M     | Standard card grid + filter logic    |
+| Detail page development                           | M     | 4-section components + routing + SEO |
+| Internationalisation setup                        | S     | Standard next-intl configuration     |
+| Visual system (Hero + animations)                 | M     | CSS + Framer Motion                  |
+| **Total**                                         | **L** | —                                    |

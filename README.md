@@ -46,6 +46,13 @@ E2E smoke tests:
 pnpm test:e2e
 ```
 
+Code formatting:
+
+```bash
+pnpm format
+pnpm format:check
+```
+
 ## CI
 
 - Workflow file: [.github/workflows/ci.yml](.github/workflows/ci.yml)
@@ -60,6 +67,12 @@ pnpm test:e2e
   - Runs on push, pull request, and weekly schedule
 - Code owners: [.github/CODEOWNERS](.github/CODEOWNERS)
   - Defines default reviewers for source and CI changes
+
+## Style Conventions
+
+- EditorConfig: [.editorconfig](.editorconfig)
+- Prettier config: [.prettierrc.json](.prettierrc.json)
+- Prettier ignore: [.prettierignore](.prettierignore)
 
 ## Collaboration Templates
 

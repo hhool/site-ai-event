@@ -38,12 +38,15 @@ Build a year-centric static website featuring ≤10 phenomenon-level open-source
 ## 4. High-Level User Journeys
 
 **Journey 1: Annual Tool Browsing**
+
 > User lands on homepage → selects year (2023/2024/2025) → browses tool card grid → filters by category → clicks a tool card
 
 **Journey 2: Deep Tool Exploration**
+
 > User clicks tool card → enters detail page → reads Background → Technical Highlights → Community Response → Target Audience → clicks "Try Demo" to enter official demo
 
 **Journey 3: Cross-Language Usage**
+
 > User clicks ZH/EN switcher → all UI copy and tool content switches to target language
 
 ---

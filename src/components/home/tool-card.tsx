@@ -46,7 +46,7 @@ export function ToolCard({ tool, locale, index, labels }: ToolCardProps) {
           {tool.categories[locale].slice(0, 2).map((category) => (
             <span
               key={category}
-              className="rounded-full border border-white/15 bg-black/30 px-2.5 py-1 text-[11px] uppercase tracking-wide text-white/70"
+              className="rounded-full border border-white/15 bg-black/30 px-2.5 py-1 text-[11px] tracking-wide text-white/70 uppercase"
             >
               {category}
             </span>

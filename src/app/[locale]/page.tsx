@@ -18,7 +18,9 @@ export default async function HomePage() {
             const items = getToolsByYear(year);
             return (
               <section key={year} className="space-y-5">
-                <h2 className="text-2xl font-medium text-white/90">{t('common.year')}: {year}</h2>
+                <h2 className="text-2xl font-medium text-white/90">
+                  {t('common.year')}: {year}
+                </h2>
                 <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {items.map((tool, index) => (
                     <ToolCard
