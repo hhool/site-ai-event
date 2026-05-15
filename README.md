@@ -67,6 +67,8 @@ pnpm format:check
   - Runs on push, pull request, and weekly schedule
 - Code owners: [.github/CODEOWNERS](.github/CODEOWNERS)
   - Defines default reviewers for source and CI changes
+- Branch protection guide: [docs/ways-of-work/governance/branch-protection.md](docs/ways-of-work/governance/branch-protection.md)
+  - Ready-to-apply required checks and protection settings for `main`
 
 ## Style Conventions
 
