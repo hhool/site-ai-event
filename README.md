@@ -52,6 +52,13 @@ pnpm test:e2e
 - Trigger: push to main and pull requests targeting main
 - Checks: lint, build, Playwright smoke tests
 
+## Repository Automation
+
+- Dependabot config: [.github/dependabot.yml](.github/dependabot.yml)
+	- Weekly npm dependency updates
+- Code scanning workflow: [.github/workflows/codeql.yml](.github/workflows/codeql.yml)
+	- Runs on push, pull request, and weekly schedule
+
 ## Content Convention
 
 - English markdown: `*.md`
