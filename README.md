@@ -1,13 +1,13 @@
 # Annual Open-Source AI Event
 
-年度现象级开源 AI 工具集网站（中英文双语）。
+A bilingual website that records phenomenon-level open-source AI tools by year.
 
-## Overview / 项目简介
+## Overview
 
-- English: A curated yearly archive of phenomenon-level open-source AI tools (up to 10 tools per year), each with deep descriptions and official demo links.
-- 中文：按年度归档现象级开源 AI 工具（每年最多 10 个），提供深入介绍与官方演示入口。
+- A curated yearly archive of phenomenon-level open-source AI tools (up to 10 tools per year).
+- Each tool includes deep descriptions and official demo links.
 
-## Stack / 技术栈
+## Stack
 
 - Next.js 16 (App Router)
 - TypeScript
@@ -17,14 +17,14 @@
 - lucide-react
 - pnpm
 
-## Routing / 路由规则
+## Routing
 
 - Default locale: `/` redirects to `/en`
 - English list page: `/en`
 - Chinese list page: `/zh`
 - Tool detail page: `/{locale}/tool/{slug}`
 
-## Development / 本地开发
+## Development
 
 ```bash
 pnpm install
@@ -44,12 +44,12 @@ E2E smoke tests:
 pnpm test:e2e
 ```
 
-## Content Convention / 文档命名约定
+## Content Convention
 
 - English markdown: `*.md`
 - Chinese markdown: `*.zh.md`
 
-## Deploy to Vercel / Vercel 部署
+## Deploy to Vercel
 
 The project includes [vercel.json](vercel.json) with standard pnpm commands.
 
