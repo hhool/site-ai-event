@@ -57,7 +57,7 @@ pnpm format:check
 
 - Workflow file: [.github/workflows/ci.yml](.github/workflows/ci.yml)
 - Trigger: push to main and pull requests targeting main
-- Checks: lint, build, Playwright smoke tests
+- Checks: format check, lint, build, Playwright smoke tests
 
 ## Repository Automation
 
@@ -87,6 +87,10 @@ pnpm format:check
 - Stale workflow: [.github/workflows/stale.yml](.github/workflows/stale.yml)
   - Marks inactive issues/PRs as stale after 21 days
   - Closes stale issues/PRs after 7 more days of inactivity
+- Commitlint workflow: [.github/workflows/commitlint.yml](.github/workflows/commitlint.yml)
+  - Validates commit messages on pull requests
+- Commitlint rules: [commitlint.config.cjs](commitlint.config.cjs)
+  - Uses Conventional Commits via `@commitlint/config-conventional`
 
 ## Release Automation
 
