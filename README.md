@@ -69,6 +69,8 @@ pnpm format:check
   - Defines default reviewers for source and CI changes
 - Branch protection guide: [docs/ways-of-work/governance/branch-protection.md](docs/ways-of-work/governance/branch-protection.md)
   - Ready-to-apply required checks and protection settings for `main`
+- Branch protection checklist (EN): [docs/ways-of-work/governance/branch-protection-checklist.md](docs/ways-of-work/governance/branch-protection-checklist.md)
+- Branch protection checklist (ZH): [docs/ways-of-work/governance/branch-protection-checklist.zh.md](docs/ways-of-work/governance/branch-protection-checklist.zh.md)
 
 ## Style Conventions
 
