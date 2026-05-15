@@ -73,6 +73,8 @@ pnpm format:check
 - Branch protection checklist (ZH): [docs/ways-of-work/governance/branch-protection-checklist.zh.md](docs/ways-of-work/governance/branch-protection-checklist.zh.md)
 - Rulesets setup guide (EN): [docs/ways-of-work/governance/rulesets-setup.md](docs/ways-of-work/governance/rulesets-setup.md)
 - Rulesets setup guide (ZH): [docs/ways-of-work/governance/rulesets-setup.zh.md](docs/ways-of-work/governance/rulesets-setup.zh.md)
+- Repository settings baseline (EN): [docs/ways-of-work/governance/repository-settings-baseline.md](docs/ways-of-work/governance/repository-settings-baseline.md)
+- Repository settings baseline (ZH): [docs/ways-of-work/governance/repository-settings-baseline.zh.md](docs/ways-of-work/governance/repository-settings-baseline.zh.md)
 
 ## Style Conventions
 

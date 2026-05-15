@@ -81,3 +81,4 @@
 
 - [Branch Protection Guide](branch-protection.md)
 - [Branch Protection Checklist](branch-protection-checklist.md)
+- [Repository Settings Baseline](repository-settings-baseline.zh.md)
