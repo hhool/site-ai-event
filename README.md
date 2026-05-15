@@ -71,6 +71,8 @@ pnpm format:check
   - Ready-to-apply required checks and protection settings for `main`
 - Branch protection checklist (EN): [docs/ways-of-work/governance/branch-protection-checklist.md](docs/ways-of-work/governance/branch-protection-checklist.md)
 - Branch protection checklist (ZH): [docs/ways-of-work/governance/branch-protection-checklist.zh.md](docs/ways-of-work/governance/branch-protection-checklist.zh.md)
+- Rulesets setup guide (EN): [docs/ways-of-work/governance/rulesets-setup.md](docs/ways-of-work/governance/rulesets-setup.md)
+- Rulesets setup guide (ZH): [docs/ways-of-work/governance/rulesets-setup.zh.md](docs/ways-of-work/governance/rulesets-setup.zh.md)
 
 ## Style Conventions
 
