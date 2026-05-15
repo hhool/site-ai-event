@@ -30,6 +30,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# local editor snapshots and test artifacts
+.history/
+test-results/
+
 # env files (can opt-in for committing if needed)
 .env*
 
