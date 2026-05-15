@@ -1,0 +1,6 @@
+# Default code owners for this repository
+* @hhool
+
+# CI and automation
+.github/workflows/* @hhool
+.github/dependabot.yml @hhool

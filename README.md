@@ -55,9 +55,11 @@ pnpm test:e2e
 ## Repository Automation
 
 - Dependabot config: [.github/dependabot.yml](.github/dependabot.yml)
-  - Weekly npm dependency updates
+  - Weekly npm and GitHub Actions dependency updates
 - Code scanning workflow: [.github/workflows/codeql.yml](.github/workflows/codeql.yml)
   - Runs on push, pull request, and weekly schedule
+- Code owners: [.github/CODEOWNERS](.github/CODEOWNERS)
+  - Defines default reviewers for source and CI changes
 
 ## Collaboration Templates
 
