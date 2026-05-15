@@ -46,6 +46,12 @@ E2E smoke tests:
 pnpm test:e2e
 ```
 
+Production smoke tests:
+
+```bash
+pnpm test:e2e:prod
+```
+
 Code formatting:
 
 ```bash

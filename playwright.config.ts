@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000';
+const useLocalDevServer = !process.env.PLAYWRIGHT_BASE_URL;
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
@@ -10,15 +13,17 @@ export default defineConfig({
   },
   reporter: [['list']],
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL,
     trace: 'on-first-retry',
   },
-  webServer: {
-    command: 'pnpm dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: true,
-    timeout: 120_000,
-  },
+  webServer: useLocalDevServer
+    ? {
+        command: 'pnpm dev',
+        url: 'http://localhost:3000',
+        reuseExistingServer: true,
+        timeout: 120_000,
+      }
+    : undefined,
   projects: [
     {
       name: 'chromium',
