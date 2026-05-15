@@ -18,6 +18,10 @@ This page is the entry point for all operations runbooks and templates.
 - [Weekly Operations Report Template](weekly-ops-report-template.md)
 - [Monthly Stability Report Template](monthly-stability-report-template.md)
 
+## Process Governance
+
+- [Operations Process Plan](operations-process-plan.md)
+
 ## Governance References
 
 - [Branch Protection Guide](../governance/branch-protection.md)
@@ -31,3 +35,4 @@ This page is the entry point for all operations runbooks and templates.
 3. After incidents: complete a Postmortem Template.
 4. After each release: run the Post-Release 24h checklist.
 5. Weekly and monthly: publish weekly and monthly reports.
+6. Keep process ownership and cadence aligned with the Operations Process Plan.

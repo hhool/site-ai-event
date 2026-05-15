@@ -18,6 +18,10 @@
 - [每周运营周报模板](weekly-ops-report-template.zh.md)
 - [月度稳定性报告模板](monthly-stability-report-template.zh.md)
 
+## 流程治理
+
+- [运维流程计划](operations-process-plan.zh.md)
+
 ## 治理参考
 
 - [Branch Protection 指南](../governance/branch-protection.md)
@@ -31,3 +35,4 @@
 3. 事件结束后：补齐事故复盘模板。
 4. 每次发布后：执行发布后 24h 观察清单。
 5. 周/月维度：输出周报与月报。
+6. 按运维流程计划统一执行责任分工与节奏。
