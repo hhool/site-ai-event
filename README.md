@@ -1,5 +1,7 @@
 # Annual Open-Source AI Event
 
+![CI](https://github.com/hhool/site-ai-event/actions/workflows/ci.yml/badge.svg)
+
 A bilingual website that records phenomenon-level open-source AI tools by year.
 
 ## Overview
@@ -43,6 +45,12 @@ E2E smoke tests:
 ```bash
 pnpm test:e2e
 ```
+
+## CI
+
+- Workflow file: [.github/workflows/ci.yml](.github/workflows/ci.yml)
+- Trigger: push to main and pull requests targeting main
+- Checks: lint, build, Playwright smoke tests
 
 ## Content Convention
 
