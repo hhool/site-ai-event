@@ -111,6 +111,8 @@ pnpm format:check
   - Ensures required PR template sections are present
 - On-call playbook (EN): [docs/ways-of-work/operations/oncall-playbook.md](docs/ways-of-work/operations/oncall-playbook.md)
 - On-call playbook (ZH): [docs/ways-of-work/operations/oncall-playbook.zh.md](docs/ways-of-work/operations/oncall-playbook.zh.md)
+- Postmortem template (EN): [docs/ways-of-work/operations/postmortem-template.md](docs/ways-of-work/operations/postmortem-template.md)
+- Postmortem template (ZH): [docs/ways-of-work/operations/postmortem-template.zh.md](docs/ways-of-work/operations/postmortem-template.zh.md)
 
 ## Release Automation
 
