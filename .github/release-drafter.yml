@@ -1,0 +1,48 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+
+categories:
+  - title: 'Frontend'
+    labels:
+      - 'frontend'
+  - title: 'Documentation'
+    labels:
+      - 'docs'
+  - title: 'CI/CD'
+    labels:
+      - 'ci'
+  - title: 'Configuration'
+    labels:
+      - 'config'
+  - title: 'Dependencies'
+    labels:
+      - 'dependencies'
+
+change-template: '- $TITLE (#$NUMBER) by @$AUTHOR'
+change-title-escapes: '\\<*_&'
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'enhancement'
+      - 'feature'
+  patch:
+    labels:
+      - 'bug'
+      - 'dependencies'
+      - 'docs'
+      - 'ci'
+      - 'config'
+  default: patch
+
+template: |
+  ## What's Changed
+
+  $CHANGES
+
+  ## Contributors
+
+  $CONTRIBUTORS

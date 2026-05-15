@@ -101,6 +101,10 @@ pnpm format:check
 - Workflow file: [.github/workflows/release.yml](.github/workflows/release.yml)
 - Trigger: push a tag like `v1.0.0`
 - Output: automatic GitHub Release with generated notes and source archive artifact
+- Draft workflow: [.github/workflows/release-drafter.yml](.github/workflows/release-drafter.yml)
+  - Maintains a rolling draft release from merged PRs
+- Draft config: [.github/release-drafter.yml](.github/release-drafter.yml)
+  - Groups changelog entries by labels (frontend/docs/ci/config/dependencies)
 
 ## Content Convention
 
