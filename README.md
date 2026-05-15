@@ -115,6 +115,8 @@ pnpm format:check
 - On-call handover template (ZH): [docs/ways-of-work/operations/oncall-handover-template.zh.md](docs/ways-of-work/operations/oncall-handover-template.zh.md)
 - Postmortem template (EN): [docs/ways-of-work/operations/postmortem-template.md](docs/ways-of-work/operations/postmortem-template.md)
 - Postmortem template (ZH): [docs/ways-of-work/operations/postmortem-template.zh.md](docs/ways-of-work/operations/postmortem-template.zh.md)
+- Weekly ops report template (EN): [docs/ways-of-work/operations/weekly-ops-report-template.md](docs/ways-of-work/operations/weekly-ops-report-template.md)
+- Weekly ops report template (ZH): [docs/ways-of-work/operations/weekly-ops-report-template.zh.md](docs/ways-of-work/operations/weekly-ops-report-template.zh.md)
 
 ## Release Automation
 
