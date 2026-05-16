@@ -81,6 +81,18 @@ export default async function HomePage() {
             matchAll: t('common.matchAll'),
             toolsMatched: t('common.toolsMatched'),
             noResults: t('common.noResults'),
+            advancedFilters: t('common.advancedFilters'),
+            filterDifficulty: t('common.filterDifficulty'),
+            filterCommunity: t('common.filterCommunity'),
+            filterTags: t('common.filterTags'),
+            filterClearAll: t('common.filterClearAll'),
+            filterAny: t('common.filterAny'),
+            filterBeginner: t('common.filterBeginner'),
+            filterIntermediate: t('common.filterIntermediate'),
+            filterAdvanced: t('common.filterAdvanced'),
+            filterSmall: t('common.filterSmall'),
+            filterMedium: t('common.filterMedium'),
+            filterLarge: t('common.filterLarge'),
           }}
         />
       </section>

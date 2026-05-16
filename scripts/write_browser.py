@@ -1,4 +1,5 @@
-'use client';
+#!/usr/bin/env python3
+content = r"""'use client';
 
 import { useMemo } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -272,3 +273,8 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     </section>
   );
 }
+"""
+
+with open('src/components/home/scenario-browser.tsx', 'w') as f:
+    f.write(content)
+print('Done')

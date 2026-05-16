@@ -25,6 +25,18 @@
     "stars": "星标",
     "highlights": "核心亮点",
     "community": "社区影响",
-    "audience": "适用人群"
+    "audience": "适用人群",
+    "advancedFilters": "高级筛选",
+    "filterDifficulty": "入门难度",
+    "filterCommunity": "社区规模",
+    "filterTags": "技术标签",
+    "filterClearAll": "清除筛选",
+    "filterAny": "全部",
+    "filterBeginner": "入门级",
+    "filterIntermediate": "进阶级",
+    "filterAdvanced": "高级",
+    "filterSmall": "小型",
+    "filterMedium": "中型",
+    "filterLarge": "大型"
   }
 }

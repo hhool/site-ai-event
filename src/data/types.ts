@@ -27,6 +27,9 @@ export interface Tool {
   demoUrl: string;
   stars: string;
   categories: { en: string[]; zh: string[] };
+  tags: string[]; // e.g., ['generative', 'multimodal', 'vision']
+  difficulty: 'beginner' | 'intermediate' | 'advanced'; // For adoption complexity
+  communitySize: 'small' | 'medium' | 'large'; // GitHub stars or activity-based
   detail: {
     en: ToolDetail;
     zh: ToolDetail;

@@ -87,6 +87,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Foundation Model'],
       zh: ['大语言模型', '基础模型'],
     },
+    tags: ["language-model", "generative", "open-source"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('LLaMA 2', 2023),
   },
   {
@@ -106,6 +109,9 @@ export const tools: Tool[] = [
       en: ['Agent', 'Automation'],
       zh: ['智能体', '自动化'],
     },
+    tags: ["ai-agent", "autonomous", "workflow"],
+    difficulty: 'advanced' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('AutoGPT', 2023),
   },
   {
@@ -125,6 +131,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Chinese AI'],
       zh: ['大语言模型', '中文 AI'],
     },
+    tags: ["language-model", "generative", "chinese"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('ChatGLM2', 2023),
   },
   {
@@ -144,6 +153,9 @@ export const tools: Tool[] = [
       en: ['Image Generation', 'Diffusion'],
       zh: ['图像生成', '扩散模型'],
     },
+    tags: ["image-generation", "generative", "multimodal"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Stable Diffusion XL', 2023),
   },
   {
@@ -163,6 +175,9 @@ export const tools: Tool[] = [
       en: ['Evaluation', 'LLMOps'],
       zh: ['评测', 'LLMOps'],
     },
+    tags: ["development-tool", "llm-ops", "monitoring"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('LangSmith', 2023),
   },
   {
@@ -182,6 +197,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Inference'],
       zh: ['大语言模型', '推理'],
     },
+    tags: ["language-model", "generative", "efficient"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Mistral 7B', 2023),
   },
   {
@@ -201,6 +219,9 @@ export const tools: Tool[] = [
       en: ['Chat Model', 'Open Community'],
       zh: ['对话模型', '开源社区'],
     },
+    tags: ["language-model", "generative", "instruction-tuned"],
+    difficulty: 'beginner' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('Vicuna', 2023),
   },
   {
@@ -220,6 +241,9 @@ export const tools: Tool[] = [
       en: ['Code Model', 'Developer Tools'],
       zh: ['代码模型', '开发工具'],
     },
+    tags: ["code-generation", "language-model", "developer-tool"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('StarCoder', 2023),
   },
   {
@@ -239,6 +263,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Open Weights'],
       zh: ['大语言模型', '开源权重'],
     },
+    tags: ["language-model", "generative", "efficient"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Falcon', 2023),
   },
   {
@@ -258,6 +285,9 @@ export const tools: Tool[] = [
       en: ['Code Model', 'LLM'],
       zh: ['代码模型', '大语言模型'],
     },
+    tags: ["code-generation", "language-model", "developer-tool"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Code Llama', 2023),
   },
   {
@@ -277,6 +307,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Foundation Model'],
       zh: ['大语言模型', '基础模型'],
     },
+    tags: ["language-model", "generative", "multimodal"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Llama 3', 2024),
   },
   {
@@ -296,6 +329,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'MoE'],
       zh: ['大语言模型', '混合专家'],
     },
+    tags: ["language-model", "generative", "reasoning"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('DeepSeek V2', 2024),
   },
   {
@@ -315,6 +351,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Multilingual'],
       zh: ['大语言模型', '多语言'],
     },
+    tags: ["language-model", "generative", "multilingual"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Qwen 2', 2024),
   },
   {
@@ -334,6 +373,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Applied AI'],
       zh: ['大语言模型', '应用 AI'],
     },
+    tags: ["language-model", "generative", "powerful"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Mistral Large', 2024),
   },
   {
@@ -353,6 +395,9 @@ export const tools: Tool[] = [
       en: ['LLMOps', 'Application Platform'],
       zh: ['LLMOps', '应用平台'],
     },
+    tags: ["ai-platform", "low-code", "workflow-builder"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Dify', 2024),
   },
   {
@@ -372,6 +417,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Lightweight'],
       zh: ['大语言模型', '轻量化'],
     },
+    tags: ["language-model", "generative", "lightweight"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Gemma', 2024),
   },
   {
@@ -391,6 +439,9 @@ export const tools: Tool[] = [
       en: ['Image Generation', 'Diffusion'],
       zh: ['图像生成', '扩散模型'],
     },
+    tags: ["image-generation", "generative", "multimodal"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Stable Diffusion 3', 2024),
   },
   {
@@ -410,6 +461,9 @@ export const tools: Tool[] = [
       en: ['Enterprise AI', 'RAG'],
       zh: ['企业 AI', '检索增强'],
     },
+    tags: ["language-model", "generative", "retrieval"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('Command R', 2024),
   },
   {
@@ -429,6 +483,9 @@ export const tools: Tool[] = [
       en: ['Small Model', 'Edge AI'],
       zh: ['小模型', '边缘 AI'],
     },
+    tags: ["language-model", "generative", "lightweight"],
+    difficulty: 'beginner' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('Phi-3', 2024),
   },
   {
@@ -448,6 +505,9 @@ export const tools: Tool[] = [
       en: ['Inference', 'Infrastructure'],
       zh: ['推理', '基础设施'],
     },
+    tags: ["inference-engine", "fast", "edge"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('Groq', 2024),
   },
   {
@@ -467,6 +527,9 @@ export const tools: Tool[] = [
       en: ['Reasoning Model', 'LLM'],
       zh: ['推理模型', '大语言模型'],
     },
+    tags: ["language-model", "reasoning", "advanced"],
+    difficulty: 'advanced' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('DeepSeek R1', 2025),
   },
   {
@@ -486,6 +549,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Agentic AI'],
       zh: ['大语言模型', '智能体 AI'],
     },
+    tags: ["language-model", "generative", "multilingual"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Qwen3', 2025),
   },
   {
@@ -505,6 +571,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Multimodal'],
       zh: ['大语言模型', '多模态'],
     },
+    tags: ["language-model", "generative", "next-gen"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Llama 4', 2025),
   },
   {
@@ -524,6 +593,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Efficiency'],
       zh: ['大语言模型', '高效率'],
     },
+    tags: ["language-model", "generative", "efficient"],
+    difficulty: 'beginner' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('Mistral Small 3', 2025),
   },
   {
@@ -543,6 +615,9 @@ export const tools: Tool[] = [
       en: ['LLM', 'Multimodal'],
       zh: ['大语言模型', '多模态'],
     },
+    tags: ["language-model", "generative", "lightweight"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Gemma 3', 2025),
   },
   {
@@ -562,6 +637,9 @@ export const tools: Tool[] = [
       en: ['Small Model', 'Reasoning'],
       zh: ['小模型', '推理'],
     },
+    tags: ["language-model", "generative", "research"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('Phi-4', 2025),
   },
   {
@@ -581,6 +659,9 @@ export const tools: Tool[] = [
       en: ['Workflow', 'Automation'],
       zh: ['工作流', '自动化'],
     },
+    tags: ["automation", "workflow", "integration"],
+    difficulty: 'beginner' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('n8n AI', 2025),
   },
   {
@@ -600,6 +681,9 @@ export const tools: Tool[] = [
       en: ['LLMOps', 'Enterprise'],
       zh: ['LLMOps', '企业级'],
     },
+    tags: ["ai-platform", "rag", "low-code"],
+    difficulty: 'beginner' as const,
+    communitySize: 'large' as const,
     detail: makeDetail('Dify 1.x', 2025),
   },
   {
@@ -619,6 +703,9 @@ export const tools: Tool[] = [
       en: ['Agent Framework', 'Developer Tools'],
       zh: ['智能体框架', '开发工具'],
     },
+    tags: ["ai-agent", "lightweight", "developer-tool"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'small' as const,
     detail: makeDetail('smolagents', 2025),
   },
   {
@@ -638,6 +725,9 @@ export const tools: Tool[] = [
       en: ['Video Generation', 'Multimodal'],
       zh: ['视频生成', '多模态'],
     },
+    tags: ["video-generation", "generative", "multimodal"],
+    difficulty: 'intermediate' as const,
+    communitySize: 'medium' as const,
     detail: makeDetail('WAN Video', 2025),
   },
 ];

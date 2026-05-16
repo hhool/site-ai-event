@@ -25,6 +25,18 @@
     "stars": "Stars",
     "highlights": "Highlights",
     "community": "Community",
-    "audience": "Audience"
+    "audience": "Audience",
+    "advancedFilters": "Advanced Filters",
+    "filterDifficulty": "Difficulty",
+    "filterCommunity": "Community Size",
+    "filterTags": "Tags",
+    "filterClearAll": "Clear Filters",
+    "filterAny": "Any",
+    "filterBeginner": "Beginner",
+    "filterIntermediate": "Intermediate",
+    "filterAdvanced": "Advanced",
+    "filterSmall": "Small",
+    "filterMedium": "Medium",
+    "filterLarge": "Large"
   }
 }
