@@ -45,6 +45,39 @@ function includesNormalized(value: string, query: string) {
   return value.toLowerCase().includes(query.toLowerCase());
 }
 
+const TOOL_LINK_PRESETS: Record<string, { q?: string; tags?: string[]; difficulty?: 'beginner' | 'intermediate' | 'advanced' }> = {
+  llm: { q: 'llm', tags: ['language-model', 'generative'] },
+  multimodal: { q: 'multimodal', tags: ['multimodal'] },
+  'prompt-engineering': { q: 'prompt', tags: ['workflow'] },
+  rag: { q: 'rag', tags: ['retrieval', 'workflow'], difficulty: 'intermediate' },
+  agent: { q: 'agent', tags: ['ai-agent', 'workflow'], difficulty: 'advanced' },
+  diffusion: { q: 'diffusion', tags: ['image-generation', 'generative'] },
+  'fine-tuning': { q: 'fine tuning', tags: ['instruction-tuned'], difficulty: 'advanced' },
+  inference: { q: 'inference', tags: ['serving', 'inference-engine'] },
+  benchmark: { q: 'benchmark', tags: ['monitoring', 'reasoning'] },
+};
+
+function buildToolSearchHref(locale: 'en' | 'zh', keyword: string) {
+  const preset = TOOL_LINK_PRESETS[keyword];
+  const params = new URLSearchParams();
+
+  if (preset?.q) {
+    params.set('q', preset.q);
+  } else {
+    params.set('q', keyword);
+  }
+
+  if (preset?.tags && preset.tags.length > 0) {
+    params.set('tags', preset.tags.join(','));
+  }
+
+  if (preset?.difficulty) {
+    params.set('difficulty', preset.difficulty);
+  }
+
+  return `/${locale}?${params.toString()}`;
+}
+
 export function KnowledgeExplorer({
   locale,
   terms,
@@ -221,7 +254,7 @@ export function KnowledgeExplorer({
           })}
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-white/65">
+        <div className="mt-4 flex flex-wrap items-center gap-2 rounded-2xl border border-white/12 bg-black/20 p-3 text-xs text-white/65 md:sticky md:top-4 md:z-10">
           <span className="mr-1 text-white/55">{labels.quickNavTitle}</span>
           {navSections.map((section) => {
             const isActive = section.id === activeSection;
@@ -267,7 +300,7 @@ export function KnowledgeExplorer({
                     {term.related.map((keyword) => (
                       <Link
                         key={keyword}
-                        href={`/${locale}?q=${encodeURIComponent(keyword)}`}
+                        href={buildToolSearchHref(locale, keyword)}
                         className="rounded-full border border-cyan-300/35 bg-cyan-300/10 px-2.5 py-1 text-xs text-cyan-100 transition hover:border-cyan-200"
                       >
                         {keyword}
