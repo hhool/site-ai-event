@@ -107,6 +107,8 @@ export default async function HomePage() {
             matchInTagline: t('common.matchInTagline'),
             matchInBackground: t('common.matchInBackground'),
             matchInHighlights: t('common.matchInHighlights'),
+            recommendBecause: t('common.recommendBecause'),
+            recommendFallback: t('common.recommendFallback'),
           }}
         />
       </section>

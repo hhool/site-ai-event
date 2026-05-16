@@ -52,6 +52,8 @@ type ScenarioBrowserProps = {
     matchInTagline: string;
     matchInBackground: string;
     matchInHighlights: string;
+    recommendBecause: string;
+    recommendFallback: string;
   };
 };
 
@@ -59,12 +61,18 @@ type ScenarioOption = {
   name: string;
   count: number;
 };
+type RecommendedTag = {
+  tag: string;
+  score: number;
+  reasons: string[];
+};
 
 export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowserProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [suggestionBatch, setSuggestionBatch] = useState(0);
+  const [recentSuggestionSignatures, setRecentSuggestionSignatures] = useState<string[]>([]);
 
   const scenarios = useMemo<ScenarioOption[]>(() => {
     const counts = new Map<string, number>();
@@ -139,6 +147,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
 
   const updateSearchWithReset = (query: string) => {
     setSuggestionBatch(0);
+    setRecentSuggestionSignatures([]);
     updateSearch(query);
   };
 
@@ -161,26 +170,61 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
   // Then apply advanced filters (difficulty, communitySize, tags)
   const advancedFilteredTools = useAdvancedFilters(scenarioFilteredTools);
 
-  // Finally apply full-text keyword search (name + description)
-  const filteredTools = useMemo(() => {
+  // Finally apply full-text keyword search with hit-strength ranking.
+  const searchEvaluation = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) {
-      return advancedFilteredTools;
+      return {
+        tools: advancedFilteredTools,
+        hitMap: new Map<string, string[]>(),
+      };
     }
 
-    return advancedFilteredTools.filter((tool) => {
-      const searchable = [
-        tool.name,
-        tool.tagline[locale],
-        tool.detail[locale].background,
-        ...tool.detail[locale].highlights.map((h) => `${h.title} ${h.desc}`),
-      ]
-        .join(' ')
-        .toLowerCase();
+    const hitMap = new Map<string, string[]>();
+    const ranked = advancedFilteredTools
+      .map((tool) => {
+        let score = 0;
+        const hits: string[] = [];
 
-      return searchable.includes(q);
-    });
-  }, [advancedFilteredTools, locale, searchQuery]);
+        if (tool.name.toLowerCase().includes(q)) {
+          score += 12;
+          hits.push(labels.matchInTitle);
+        }
+        if (tool.tagline[locale].toLowerCase().includes(q)) {
+          score += 7;
+          hits.push(labels.matchInTagline);
+        }
+        if (tool.detail[locale].background.toLowerCase().includes(q)) {
+          score += 2;
+          hits.push(labels.matchInBackground);
+        }
+
+        const highlightJoined = tool.detail[locale].highlights
+          .map((h) => `${h.title} ${h.desc}`)
+          .join(' ')
+          .toLowerCase();
+        if (highlightJoined.includes(q)) {
+          score += 4;
+          hits.push(labels.matchInHighlights);
+        }
+
+        if (hits.length > 0) {
+          hitMap.set(tool.slug, hits);
+        }
+
+        return { tool, score };
+      })
+      .filter((item) => item.score > 0)
+      .sort((a, b) => b.score - a.score || a.tool.name.localeCompare(b.tool.name));
+
+    return {
+      tools: ranked.map((item) => item.tool),
+      hitMap,
+    };
+  }, [advancedFilteredTools, labels.matchInBackground, labels.matchInHighlights, labels.matchInTagline, labels.matchInTitle, locale, searchQuery]);
+
+  const filteredTools = searchEvaluation.tools;
+  const searchHitMap = searchEvaluation.hitMap;
 
   const groupedByYear = useMemo(() => {
     const grouped = new Map<number, Tool[]>();
@@ -189,40 +233,6 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     }
     return grouped;
   }, [filteredTools, years]);
-
-  const searchHitMap = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    const hitMap = new Map<string, string[]>();
-    if (!q) {
-      return hitMap;
-    }
-
-    for (const tool of filteredTools) {
-      const hits: string[] = [];
-      if (tool.name.toLowerCase().includes(q)) {
-        hits.push(labels.matchInTitle);
-      }
-      if (tool.tagline[locale].toLowerCase().includes(q)) {
-        hits.push(labels.matchInTagline);
-      }
-      if (tool.detail[locale].background.toLowerCase().includes(q)) {
-        hits.push(labels.matchInBackground);
-      }
-      const highlightJoined = tool.detail[locale].highlights
-        .map((h) => `${h.title} ${h.desc}`)
-        .join(' ')
-        .toLowerCase();
-      if (highlightJoined.includes(q)) {
-        hits.push(labels.matchInHighlights);
-      }
-
-      if (hits.length > 0) {
-        hitMap.set(tool.slug, hits);
-      }
-    }
-
-    return hitMap;
-  }, [filteredTools, labels.matchInBackground, labels.matchInHighlights, labels.matchInTagline, labels.matchInTitle, locale, searchQuery]);
 
   const yearStats = useMemo(() => {
     const total = filteredTools.length;
@@ -233,9 +243,9 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     });
   }, [filteredTools, years]);
 
-  const recommendedTags = useMemo(() => {
+  const recommendedTags = useMemo<RecommendedTag[]>(() => {
     if (filteredTools.length > 0) {
-      return [] as string[];
+      return [];
     }
 
     const pool =
@@ -244,7 +254,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
         : scenarioFilteredTools.length > 0
           ? scenarioFilteredTools
           : tools;
-    const scores = new Map<string, number>();
+    const scored = new Map<string, { score: number; scenarios: Set<string> }>();
     const active = new Set((searchParams.get('tags') ?? '').split(',').filter(Boolean));
 
     for (const tool of pool) {
@@ -252,29 +262,77 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
         tool.categories[locale].includes(scenario),
       ).length;
       const scenarioWeight = scenarioMatchCount > 0 ? 1 + scenarioMatchCount * 2 : 1;
+      const matchedScenarios = selectedScenarios.filter((scenario) =>
+        tool.categories[locale].includes(scenario),
+      );
 
       for (const tag of tool.tags) {
         if (!active.has(tag)) {
-          scores.set(tag, (scores.get(tag) ?? 0) + scenarioWeight);
+          const current = scored.get(tag) ?? { score: 0, scenarios: new Set<string>() };
+          current.score += scenarioWeight;
+          matchedScenarios.forEach((scenario) => current.scenarios.add(scenario));
+          scored.set(tag, current);
         }
       }
     }
 
-    return [...scores.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([tag]) => tag);
+    return [...scored.entries()]
+      .sort((a, b) => b[1].score - a[1].score || a[0].localeCompare(b[0]))
+      .map(([tag, value]) => ({
+        tag,
+        score: value.score,
+        reasons: [...value.scenarios].slice(0, 2),
+      }));
   }, [advancedFilteredTools, filteredTools.length, locale, scenarioFilteredTools, searchParams, selectedScenarios, tools]);
 
-  const visibleRecommendedTags = useMemo(() => {
+  const visibleRecommendedTags = useMemo<RecommendedTag[]>(() => {
     if (recommendedTags.length === 0) {
-      return [] as string[];
+      return [];
     }
 
     const batchSize = 6;
-    const start = (suggestionBatch * batchSize) % recommendedTags.length;
+    const start = suggestionBatch % recommendedTags.length;
     const ordered = [...recommendedTags.slice(start), ...recommendedTags.slice(0, start)];
     return ordered.slice(0, Math.min(batchSize, recommendedTags.length));
   }, [recommendedTags, suggestionBatch]);
+
+  const rotateSuggestionBatch = () => {
+    if (recommendedTags.length <= 1) {
+      return;
+    }
+
+    const batchSize = Math.min(6, recommendedTags.length);
+    const getBatchSignature = (start: number) => {
+      const ordered = [...recommendedTags.slice(start), ...recommendedTags.slice(0, start)];
+      return ordered
+        .slice(0, batchSize)
+        .map((item) => item.tag)
+        .join('|');
+    };
+
+    const recent = new Set(recentSuggestionSignatures);
+    let nextCursor = (suggestionBatch + 1) % recommendedTags.length;
+    let nextSignature = getBatchSignature(nextCursor);
+    let foundUnseen = false;
+
+    for (let step = 1; step <= recommendedTags.length; step += 1) {
+      const cursor = (suggestionBatch + step) % recommendedTags.length;
+      const signature = getBatchSignature(cursor);
+      if (!recent.has(signature)) {
+        nextCursor = cursor;
+        nextSignature = signature;
+        foundUnseen = true;
+        break;
+      }
+    }
+
+    if (!foundUnseen) {
+      setRecentSuggestionSignatures([nextSignature]);
+    } else {
+      setRecentSuggestionSignatures((prev) => [...prev, nextSignature].slice(-8));
+    }
+    setSuggestionBatch(nextCursor);
+  };
 
   const addRecommendedTag = (tag: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -284,6 +342,8 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     }
     params.delete('q');
     const qs = params.toString();
+    setSuggestionBatch(0);
+    setRecentSuggestionSignatures([]);
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
 
@@ -473,22 +533,28 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
               {recommendedTags.length > visibleRecommendedTags.length ? (
                 <button
                   type="button"
-                  onClick={() => setSuggestionBatch((prev) => prev + 1)}
+                  onClick={rotateSuggestionBatch}
                   className="mb-3 rounded-full border border-white/20 px-3 py-1 text-xs text-white/75 transition hover:border-white/40 hover:text-white"
                 >
                   {labels.nextBatch}
                 </button>
               ) : null}
-              <div className="flex flex-wrap justify-center gap-2">
-                {visibleRecommendedTags.map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => addRecommendedTag(tag)}
-                    className="rounded-full border border-cyan-400/45 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-200 transition hover:border-cyan-300/70 hover:bg-cyan-300/15"
-                  >
-                    {getTagDisplay(tag, locale)}
-                  </button>
+              <div className="flex flex-wrap justify-center gap-3">
+                {visibleRecommendedTags.map((item) => (
+                  <div key={item.tag} className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-2">
+                    <button
+                      type="button"
+                      onClick={() => addRecommendedTag(item.tag)}
+                      className="rounded-full border border-cyan-400/45 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-200 transition hover:border-cyan-300/70 hover:bg-cyan-300/15"
+                    >
+                      {getTagDisplay(item.tag, locale)}
+                    </button>
+                    <p className="mt-1 max-w-56 text-[11px] text-white/55">
+                      {item.reasons.length > 0
+                        ? `${labels.recommendBecause} ${item.reasons.join(' + ')}`
+                        : labels.recommendFallback}
+                    </p>
+                  </div>
                 ))}
               </div>
             </div>

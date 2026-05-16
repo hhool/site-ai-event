@@ -52,6 +52,8 @@
     "matchInTitle": "Matched: Name",
     "matchInTagline": "Matched: Tagline",
     "matchInBackground": "Matched: Background",
-    "matchInHighlights": "Matched: Highlights"
+    "matchInHighlights": "Matched: Highlights",
+    "recommendBecause": "Recommended because you selected",
+    "recommendFallback": "Recommended by current trend and popularity"
   }
 }

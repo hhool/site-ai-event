@@ -52,6 +52,8 @@
     "matchInTitle": "命中：名称",
     "matchInTagline": "命中：简介",
     "matchInBackground": "命中：背景",
-    "matchInHighlights": "命中：亮点"
+    "matchInHighlights": "命中：亮点",
+    "recommendBecause": "因你选择了",
+    "recommendFallback": "基于当前趋势热度推荐"
   }
 }
