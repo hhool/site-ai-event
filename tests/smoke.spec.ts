@@ -50,3 +50,18 @@ test('knowledge page supports search and filtering', async ({ page }) => {
   await page.getByRole('button', { name: 'Reset' }).click();
   await expect(page.getByRole('heading', { level: 3, name: 'Diffusion Model' })).toBeVisible();
 });
+
+test('Chinese knowledge page supports search and reset', async ({ page }) => {
+  await page.goto('/zh/knowledge');
+  await expect(page.getByRole('heading', { level: 1, name: 'AIGC 关联知识普及站' })).toBeVisible();
+
+  const search = page.getByPlaceholder('搜索术语、领域或行业...');
+  await search.fill('检索增强生成');
+
+  await expect(page.getByRole('heading', { level: 3, name: '检索增强生成' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 3, name: '扩散模型' })).toHaveCount(0);
+  await expect(page.getByText('匹配条目:')).toBeVisible();
+
+  await page.getByRole('button', { name: '重置' }).click();
+  await expect(page.getByRole('heading', { level: 3, name: '扩散模型' })).toBeVisible();
+});

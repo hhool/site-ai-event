@@ -79,6 +79,12 @@ export default async function KnowledgePage() {
             resetFilters: t('knowledge.resetFilters'),
             matchedResults: t('knowledge.matchedResults'),
             noMatches: t('knowledge.noMatches'),
+            quickNavTitle: t('knowledge.quickNavTitle'),
+            navTerms: t('knowledge.navTerms'),
+            navDomains: t('knowledge.navDomains'),
+            navIndustries: t('knowledge.navIndustries'),
+            navCross: t('knowledge.navCross'),
+            exploreTools: t('knowledge.exploreTools'),
           }}
         />
       </section>

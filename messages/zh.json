@@ -106,6 +106,12 @@
     "categoryAll": "全部分类",
     "resetFilters": "重置",
     "matchedResults": "匹配条目",
-    "noMatches": "没有找到匹配内容，请尝试其他关键词或重置筛选。"
+    "noMatches": "没有找到匹配内容，请尝试其他关键词或重置筛选。",
+    "quickNavTitle": "快速跳转",
+    "navTerms": "术语",
+    "navDomains": "领域",
+    "navIndustries": "行业",
+    "navCross": "交叉学科",
+    "exploreTools": "查看相关工具"
   }
 }

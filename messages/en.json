@@ -106,6 +106,12 @@
     "categoryAll": "All Categories",
     "resetFilters": "Reset",
     "matchedResults": "Matched items",
-    "noMatches": "No matching content found. Try a different keyword or reset filters."
+    "noMatches": "No matching content found. Try a different keyword or reset filters.",
+    "quickNavTitle": "Jump to",
+    "navTerms": "Terms",
+    "navDomains": "Domains",
+    "navIndustries": "Industries",
+    "navCross": "Cross Topics",
+    "exploreTools": "Explore related tools"
   }
 }

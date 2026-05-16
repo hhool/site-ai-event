@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import type {
   CrossDisciplineTopic,
@@ -31,6 +32,12 @@ type KnowledgeExplorerProps = {
     resetFilters: string;
     matchedResults: string;
     noMatches: string;
+    quickNavTitle: string;
+    navTerms: string;
+    navDomains: string;
+    navIndustries: string;
+    navCross: string;
+    exploreTools: string;
   };
 };
 
@@ -174,9 +181,17 @@ export function KnowledgeExplorer({
             );
           })}
         </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-white/65">
+          <span className="mr-1 text-white/55">{labels.quickNavTitle}</span>
+          <a className="rounded-full border border-white/18 px-2.5 py-1 hover:border-cyan-200/50 hover:text-cyan-100" href="#knowledge-terms">{labels.navTerms}</a>
+          <a className="rounded-full border border-white/18 px-2.5 py-1 hover:border-cyan-200/50 hover:text-cyan-100" href="#knowledge-domains">{labels.navDomains}</a>
+          <a className="rounded-full border border-white/18 px-2.5 py-1 hover:border-cyan-200/50 hover:text-cyan-100" href="#knowledge-industries">{labels.navIndustries}</a>
+          <a className="rounded-full border border-white/18 px-2.5 py-1 hover:border-cyan-200/50 hover:text-cyan-100" href="#knowledge-cross">{labels.navCross}</a>
+        </div>
       </section>
 
-      <section className="mt-12">
+      <section id="knowledge-terms" className="mt-12 scroll-mt-24">
         <h2 className="text-2xl font-semibold">{labels.termsTitle}</h2>
         <p className="mt-2 text-sm text-white/70">{labels.termsSubtitle}</p>
         {filteredTerms.length > 0 ? (
@@ -194,6 +209,20 @@ export function KnowledgeExplorer({
                 <p className="mt-3 text-xs leading-6 text-amber-200/90">
                   {labels.misconception}: {term.misconception[locale]}
                 </p>
+                <div className="mt-4">
+                  <p className="text-xs text-white/50">{labels.exploreTools}</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {term.related.map((keyword) => (
+                      <Link
+                        key={keyword}
+                        href={`/${locale}?q=${encodeURIComponent(keyword)}`}
+                        className="rounded-full border border-cyan-300/35 bg-cyan-300/10 px-2.5 py-1 text-xs text-cyan-100 transition hover:border-cyan-200"
+                      >
+                        {keyword}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               </article>
             ))}
           </div>
@@ -205,7 +234,7 @@ export function KnowledgeExplorer({
       </section>
 
       <section className="mt-12 grid gap-6 lg:grid-cols-2">
-        <div>
+        <div id="knowledge-domains" className="scroll-mt-24">
           <h2 className="text-2xl font-semibold">{labels.domainTitle}</h2>
           <p className="mt-2 text-sm text-white/70">{labels.domainSubtitle}</p>
           {filteredDomains.length > 0 ? (
@@ -232,7 +261,7 @@ export function KnowledgeExplorer({
           )}
         </div>
 
-        <div>
+        <div id="knowledge-industries" className="scroll-mt-24">
           <h2 className="text-2xl font-semibold">{labels.industryTitle}</h2>
           <p className="mt-2 text-sm text-white/70">{labels.industrySubtitle}</p>
           {filteredIndustries.length > 0 ? (
@@ -264,7 +293,7 @@ export function KnowledgeExplorer({
         </div>
       </section>
 
-      <section className="mt-12">
+      <section id="knowledge-cross" className="mt-12 scroll-mt-24">
         <h2 className="text-2xl font-semibold">{labels.crossDisciplineTitle}</h2>
         <p className="mt-2 text-sm text-white/70">{labels.crossDisciplineSubtitle}</p>
         {filteredCrossTopics.length > 0 ? (
