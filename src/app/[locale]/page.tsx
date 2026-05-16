@@ -93,6 +93,12 @@ export default async function HomePage() {
             filterSmall: t('common.filterSmall'),
             filterMedium: t('common.filterMedium'),
             filterLarge: t('common.filterLarge'),
+            activeFilters: t('common.activeFilters'),
+            showFilters: t('common.showFilters'),
+            hideFilters: t('common.hideFilters'),
+            searchLabel: t('common.searchLabel'),
+            searchPlaceholder: t('common.searchPlaceholder'),
+            searchClear: t('common.searchClear'),
           }}
         />
       </section>

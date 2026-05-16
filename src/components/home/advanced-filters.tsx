@@ -1,14 +1,17 @@
 'use client';
 
-import { useMemo, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useMemo, useCallback, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { Tool } from '@/data/types';
 
 type AdvancedFiltersProps = {
-  locale: 'en' | 'zh';
   tools: Tool[];
   labels: {
     title: string;
+    activeFilters: string;
+    showFilters: string;
+    hideFilters: string;
     difficultyLabel: string;
     communitySizeLabel: string;
     tagsLabel: string;
@@ -35,7 +38,7 @@ const COMMUNITY_COLORS = {
   large: 'border-violet-500/60 text-violet-300 bg-violet-500/10',
 } as const;
 
-export function AdvancedFilters({ locale: _locale, tools, labels }: AdvancedFiltersProps) {
+export function AdvancedFilters({ tools, labels }: AdvancedFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -61,6 +64,7 @@ export function AdvancedFilters({ locale: _locale, tools, labels }: AdvancedFilt
   }, [tools]);
 
   const hasFilters = difficulty !== 'any' || communitySize !== 'any' || activeTags.length > 0;
+  const [expanded, setExpanded] = useState(false);
 
   const updateParam = useCallback(
     (key: string, value: string | null) => {
@@ -95,105 +99,182 @@ export function AdvancedFilters({ locale: _locale, tools, labels }: AdvancedFilt
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   }, [searchParams, pathname, router]);
 
+  const removeTag = useCallback(
+    (tag: string) => {
+      const next = activeTags.filter((t) => t !== tag);
+      updateParam('tags', next.length ? next.join(',') : null);
+    },
+    [activeTags, updateParam],
+  );
+
+  const difficultyLabelMap = {
+    beginner: labels.beginner,
+    intermediate: labels.intermediate,
+    advanced: labels.advanced,
+  } as const;
+
+  const communityLabelMap = {
+    small: labels.small,
+    medium: labels.medium,
+    large: labels.large,
+  } as const;
+
   return (
     <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-sm font-medium tracking-wider text-white/70 uppercase">
-          {labels.title}
-        </h3>
-        {hasFilters && (
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-medium tracking-wider text-white/70 uppercase">
+            {labels.title}
+          </h3>
+          <button
+            onClick={() => setExpanded((prev) => !prev)}
+            className="rounded-full border border-white/15 px-2.5 py-1 text-xs text-white/75 transition hover:border-white/35 hover:text-white"
+          >
+            {expanded ? labels.hideFilters : labels.showFilters}
+          </button>
+        </div>
+        {hasFilters ? (
           <button
             onClick={clearAll}
-            className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+            className="text-xs text-cyan-400 transition-colors hover:text-cyan-300"
           >
             {labels.clearAll}
           </button>
-        )}
+        ) : null}
       </div>
 
-      {/* Difficulty */}
-      <div className="mb-4">
-        <p className="mb-2 text-xs text-white/50 uppercase tracking-widest">
-          {labels.difficultyLabel}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {(['any', 'beginner', 'intermediate', 'advanced'] as const).map((level) => {
-            const isActive = difficulty === level;
-            const colorClass =
-              level === 'any'
-                ? isActive
-                  ? 'border-white/60 text-white bg-white/15'
-                  : 'border-white/20 text-white/50'
-                : isActive
-                  ? DIFFICULTY_COLORS[level]
-                  : `border-white/10 text-white/40 hover:${DIFFICULTY_COLORS[level]}`;
-
-            return (
+      {hasFilters ? (
+        <div className="mb-4 space-y-2">
+          <p className="text-xs text-white/50 uppercase tracking-widest">{labels.activeFilters}</p>
+          <div className="flex flex-wrap gap-2">
+            {difficulty !== 'any' ? (
               <button
-                key={level}
-                onClick={() => updateParam('difficulty', level)}
-                className={`rounded-full border px-3 py-1 text-xs transition-all ${colorClass} cursor-pointer`}
+                onClick={() => updateParam('difficulty', null)}
+                className="rounded-full border border-emerald-500/50 bg-emerald-500/15 px-3 py-1 text-xs text-emerald-200"
               >
-                {labels[level as keyof typeof labels] as string}
+                {labels.difficultyLabel}: {difficultyLabelMap[difficulty as keyof typeof difficultyLabelMap]} x
               </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Community Size */}
-      <div className="mb-4">
-        <p className="mb-2 text-xs text-white/50 uppercase tracking-widest">
-          {labels.communitySizeLabel}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {(['any', 'small', 'medium', 'large'] as const).map((size) => {
-            const isActive = communitySize === size;
-            const colorClass =
-              size === 'any'
-                ? isActive
-                  ? 'border-white/60 text-white bg-white/15'
-                  : 'border-white/20 text-white/50'
-                : isActive
-                  ? COMMUNITY_COLORS[size]
-                  : 'border-white/10 text-white/40';
-
-            return (
+            ) : null}
+            {communitySize !== 'any' ? (
               <button
-                key={size}
-                onClick={() => updateParam('communitySize', size)}
-                className={`rounded-full border px-3 py-1 text-xs transition-all ${colorClass} cursor-pointer`}
+                onClick={() => updateParam('communitySize', null)}
+                className="rounded-full border border-blue-500/50 bg-blue-500/15 px-3 py-1 text-xs text-blue-200"
               >
-                {labels[size as keyof typeof labels] as string}
+                {labels.communitySizeLabel}:{' '}
+                {communityLabelMap[communitySize as keyof typeof communityLabelMap]} x
               </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Tags */}
-      <div>
-        <p className="mb-2 text-xs text-white/50 uppercase tracking-widest">{labels.tagsLabel}</p>
-        <div className="flex flex-wrap gap-2">
-          {allTags.map(({ tag, count }) => {
-            const isActive = activeTags.includes(tag);
-            return (
+            ) : null}
+            {activeTags.map((tag) => (
               <button
                 key={tag}
-                onClick={() => toggleTag(tag)}
-                className={`rounded-full border px-3 py-1 text-xs transition-all cursor-pointer ${
-                  isActive
-                    ? 'border-cyan-400/60 bg-cyan-400/15 text-cyan-300'
-                    : 'border-white/10 text-white/40 hover:border-white/30 hover:text-white/60'
-                }`}
+                onClick={() => removeTag(tag)}
+                className="rounded-full border border-cyan-400/55 bg-cyan-400/15 px-3 py-1 text-xs text-cyan-200"
               >
-                {tag}
-                <span className="ml-1 opacity-50">({count})</span>
+                {tag} x
               </button>
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
+      ) : null}
+
+      <AnimatePresence initial={false}>
+        {expanded ? (
+          <motion.div
+            key="advanced-filter-content"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
+            className="overflow-hidden"
+          >
+            {/* Difficulty */}
+            <div className="mb-4">
+              <p className="mb-2 text-xs text-white/50 uppercase tracking-widest">
+                {labels.difficultyLabel}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {(['any', 'beginner', 'intermediate', 'advanced'] as const).map((level) => {
+                  const isActive = difficulty === level;
+                  const colorClass =
+                    level === 'any'
+                      ? isActive
+                        ? 'border-white/60 text-white bg-white/15'
+                        : 'border-white/20 text-white/50'
+                      : isActive
+                        ? DIFFICULTY_COLORS[level]
+                        : `border-white/10 text-white/40 hover:${DIFFICULTY_COLORS[level]}`;
+
+                  return (
+                    <button
+                      key={level}
+                      onClick={() => updateParam('difficulty', level)}
+                      className={`rounded-full border px-3 py-1 text-xs transition-all ${colorClass} cursor-pointer`}
+                    >
+                      {labels[level as keyof typeof labels] as string}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Community Size */}
+            <div className="mb-4">
+              <p className="mb-2 text-xs text-white/50 uppercase tracking-widest">
+                {labels.communitySizeLabel}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {(['any', 'small', 'medium', 'large'] as const).map((size) => {
+                  const isActive = communitySize === size;
+                  const colorClass =
+                    size === 'any'
+                      ? isActive
+                        ? 'border-white/60 text-white bg-white/15'
+                        : 'border-white/20 text-white/50'
+                      : isActive
+                        ? COMMUNITY_COLORS[size]
+                        : 'border-white/10 text-white/40';
+
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => updateParam('communitySize', size)}
+                      className={`rounded-full border px-3 py-1 text-xs transition-all ${colorClass} cursor-pointer`}
+                    >
+                      {labels[size as keyof typeof labels] as string}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Tags */}
+            <div>
+              <p className="mb-2 text-xs text-white/50 uppercase tracking-widest">
+                {labels.tagsLabel}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {allTags.map(({ tag, count }) => {
+                  const isActive = activeTags.includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      onClick={() => toggleTag(tag)}
+                      className={`rounded-full border px-3 py-1 text-xs transition-all cursor-pointer ${
+                        isActive
+                          ? 'border-cyan-400/60 bg-cyan-400/15 text-cyan-300'
+                          : 'border-white/10 text-white/40 hover:border-white/30 hover:text-white/60'
+                      }`}
+                    >
+                      {tag}
+                      <span className="ml-1 opacity-50">({count})</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }

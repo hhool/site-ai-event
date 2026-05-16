@@ -37,6 +37,12 @@ type ScenarioBrowserProps = {
     filterSmall: string;
     filterMedium: string;
     filterLarge: string;
+    activeFilters: string;
+    showFilters: string;
+    hideFilters: string;
+    searchLabel: string;
+    searchPlaceholder: string;
+    searchClear: string;
   };
 };
 
@@ -78,6 +84,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
   }, [scenarioNames, searchParams]);
 
   const matchMode = searchParams.get('mode') === 'all' ? 'all' : 'any';
+  const searchQuery = searchParams.get('q') ?? '';
 
   const updateFilters = (nextScenarios: string[], nextMode: 'any' | 'all' = matchMode) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -107,6 +114,19 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     updateFilters([...selectedScenarios, scenarioName]);
   };
 
+  const updateSearch = (query: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const trimmed = query.trim();
+    if (trimmed.length === 0) {
+      params.delete('q');
+    } else {
+      params.set('q', trimmed);
+    }
+
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
+
   // Apply scenario filter first
   const scenarioFilteredTools = useMemo(() => {
     if (selectedScenarios.length === 0) {
@@ -124,7 +144,28 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
   }, [locale, matchMode, selectedScenarios, tools]);
 
   // Then apply advanced filters (difficulty, communitySize, tags)
-  const filteredTools = useAdvancedFilters(scenarioFilteredTools);
+  const advancedFilteredTools = useAdvancedFilters(scenarioFilteredTools);
+
+  // Finally apply full-text keyword search (name + description)
+  const filteredTools = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) {
+      return advancedFilteredTools;
+    }
+
+    return advancedFilteredTools.filter((tool) => {
+      const searchable = [
+        tool.name,
+        tool.tagline[locale],
+        tool.detail[locale].background,
+        ...tool.detail[locale].highlights.map((h) => `${h.title} ${h.desc}`),
+      ]
+        .join(' ')
+        .toLowerCase();
+
+      return searchable.includes(q);
+    });
+  }, [advancedFilteredTools, locale, searchQuery]);
 
   const groupedByYear = useMemo(() => {
     const grouped = new Map<number, Tool[]>();
@@ -209,10 +250,12 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
 
       {/* Advanced Filters Panel */}
       <AdvancedFilters
-        locale={locale}
         tools={tools}
         labels={{
           title: labels.advancedFilters,
+          activeFilters: labels.activeFilters,
+          showFilters: labels.showFilters,
+          hideFilters: labels.hideFilters,
           difficultyLabel: labels.filterDifficulty,
           communitySizeLabel: labels.filterCommunity,
           tagsLabel: labels.filterTags,
@@ -226,6 +269,30 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
           large: labels.filterLarge,
         }}
       />
+
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md">
+        <label className="mb-2 block text-xs tracking-widest text-white/60 uppercase">
+          {labels.searchLabel}
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(event) => updateSearch(event.target.value)}
+            placeholder={labels.searchPlaceholder}
+            className="w-full rounded-xl border border-white/15 bg-black/25 px-3 py-2 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-cyan-300/60"
+          />
+          {searchQuery ? (
+            <button
+              type="button"
+              onClick={() => updateSearch('')}
+              className="rounded-xl border border-white/20 px-3 py-2 text-xs text-white/75 transition hover:border-white/40 hover:text-white"
+            >
+              {labels.searchClear}
+            </button>
+          ) : null}
+        </div>
+      </div>
 
       <p className="text-sm text-white/70">
         {labels.toolsMatched}: {filteredTools.length}

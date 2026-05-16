@@ -37,6 +37,13 @@
     "filterAdvanced": "Advanced",
     "filterSmall": "Small",
     "filterMedium": "Medium",
-    "filterLarge": "Large"
+    "filterLarge": "Large",
+    "activeFilters": "Active Filters",
+    "showFilters": "Expand",
+    "hideFilters": "Collapse",
+    "searchLabel": "Keyword Search",
+    "searchPlaceholder": "Search tool name or description",
+    "searchClear": "Clear",
+    "toolMeta": "Tool Metadata"
   }
 }

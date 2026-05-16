@@ -37,6 +37,13 @@
     "filterAdvanced": "高级",
     "filterSmall": "小型",
     "filterMedium": "中型",
-    "filterLarge": "大型"
+    "filterLarge": "大型",
+    "activeFilters": "当前筛选",
+    "showFilters": "展开",
+    "hideFilters": "收起",
+    "searchLabel": "关键词搜索",
+    "searchPlaceholder": "搜索工具名称或描述",
+    "searchClear": "清除",
+    "toolMeta": "工具元信息"
   }
 }

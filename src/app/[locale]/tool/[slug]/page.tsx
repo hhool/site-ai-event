@@ -69,6 +69,30 @@ export default async function ToolDetailPage({
 
   const detail = tool.detail[safeLocale];
 
+  const difficultyMap = {
+    beginner: t('common.filterBeginner'),
+    intermediate: t('common.filterIntermediate'),
+    advanced: t('common.filterAdvanced'),
+  } as const;
+
+  const communityMap = {
+    small: t('common.filterSmall'),
+    medium: t('common.filterMedium'),
+    large: t('common.filterLarge'),
+  } as const;
+
+  const difficultyColorMap = {
+    beginner: 'border-emerald-500/60 bg-emerald-500/15 text-emerald-200',
+    intermediate: 'border-amber-500/60 bg-amber-500/15 text-amber-200',
+    advanced: 'border-red-500/60 bg-red-500/15 text-red-200',
+  } as const;
+
+  const communityColorMap = {
+    small: 'border-slate-500/60 bg-slate-500/15 text-slate-200',
+    medium: 'border-blue-500/60 bg-blue-500/15 text-blue-200',
+    large: 'border-violet-500/60 bg-violet-500/15 text-violet-200',
+  } as const;
+
   // Generate JSON-LD structured data
   const schemaData = {
     '@context': 'https://schema.org',
@@ -106,6 +130,37 @@ export default async function ToolDetailPage({
 
         <h1 className="mt-5 text-4xl font-semibold">{tool.name}</h1>
         <p className="mt-4 text-white/75">{tool.tagline[safeLocale]}</p>
+
+        <section className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md">
+          <h2 className="text-xs tracking-widest text-white/60 uppercase">{t('common.toolMeta')}</h2>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1 text-xs text-white/80">
+              {t('common.year')}: {tool.year}
+            </span>
+            <span
+              className={`rounded-full border px-3 py-1 text-xs ${difficultyColorMap[tool.difficulty]}`}
+            >
+              {t('common.filterDifficulty')}: {difficultyMap[tool.difficulty]}
+            </span>
+            <span
+              className={`rounded-full border px-3 py-1 text-xs ${communityColorMap[tool.communitySize]}`}
+            >
+              {t('common.filterCommunity')}: {communityMap[tool.communitySize]}
+            </span>
+          </div>
+
+          <p className="mt-3 text-xs tracking-widest text-white/55 uppercase">{t('common.filterTags')}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {tool.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-cyan-400/40 bg-cyan-400/10 px-2.5 py-1 text-[11px] text-cyan-200"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </section>
 
         <div className="mt-8 flex flex-wrap gap-2">
           <ExternalLinkPill href={tool.demoUrl}>{t('common.openDemo')}</ExternalLinkPill>
