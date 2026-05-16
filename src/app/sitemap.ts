@@ -34,6 +34,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 1,
     });
+
+    urls.push({
+      url: `${baseUrl}/${locale}/knowledge`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    });
   });
 
   // Tool detail pages for each locale

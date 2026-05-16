@@ -17,6 +17,7 @@
     "quickStartBody": "如果你只是随便逛，先看年份切换和场景卡片，快速了解每一年最有代表性的工具。",
     "builderTitle": "给开发者",
     "builderBody": "如果你是在评估落地方案，建议配合筛选、搜索和详情页，比较适配度、接入成本和成熟度。",
+    "knowledgeEntry": "进入 AIGC 知识普及地图",
     "scenariosTitle": "热门场景推荐",
     "scenariosSubtitle": "从常见应用场景和技术方向开始探索。",
     "scenarioTitle": "按任务场景浏览",
@@ -81,5 +82,25 @@
     "quickFlowBody": "先选一个任务场景，再看每年推荐的工具卡片，最后点进详情页看一句话理解和官方演示。",
     "proFlowTitle": "专业评估",
     "proFlowBody": "先用难度、社区规模和标签缩小范围，再结合搜索命中与对比面板，评估接入成本、成熟度和可维护性。"
+  },
+  "knowledge": {
+    "pageEyebrow": "AIGC 知识地图",
+    "pageTitle": "AIGC 关联知识普及站",
+    "pageDescription": "从概念与术语入门，连接到相关领域、行业应用与交叉学科，帮助你建立完整的 AIGC 认知框架。",
+    "statsConcepts": "基础术语",
+    "statsDomains": "关联领域",
+    "statsIndustries": "行业应用",
+    "statsCrossDiscipline": "交叉学科",
+    "termsTitle": "概念与术语",
+    "termsSubtitle": "先看定义，再看常见误区，避免概念混用。",
+    "misconception": "常见误区",
+    "domainTitle": "关联领域图谱",
+    "domainSubtitle": "从模型、系统到应用层，理解能力如何传导到产品。",
+    "industryTitle": "行业应用矩阵",
+    "industrySubtitle": "围绕痛点、能力映射和典型案例理解落地方式。",
+    "painPoint": "核心痛点",
+    "mapping": "AIGC 能力映射",
+    "crossDisciplineTitle": "学科与交叉学科",
+    "crossDisciplineSubtitle": "理解 AIGC 不只是技术问题，也涉及交互、认知、法律与设计。"
   }
 }

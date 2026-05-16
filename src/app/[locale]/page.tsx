@@ -62,6 +62,7 @@ export default async function HomePage() {
             quickStartBody: t('common.quickStartBody'),
             builderTitle: t('common.builderTitle'),
             builderBody: t('common.builderBody'),
+            knowledgeEntry: t('common.knowledgeEntry'),
           }}
         />
 

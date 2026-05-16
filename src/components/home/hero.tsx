@@ -9,6 +9,7 @@ type HomeHeroProps = {
     quickStartBody: string;
     builderTitle: string;
     builderBody: string;
+    knowledgeEntry: string;
   };
 };
 
@@ -53,6 +54,15 @@ export function HomeHero({ title, subtitle, locale, labels }: HomeHeroProps) {
           <p className="text-xs tracking-[0.24em] text-violet-100/80 uppercase">{labels.builderTitle}</p>
           <p className="mt-2 text-sm leading-7 text-white/78">{labels.builderBody}</p>
         </div>
+      </div>
+
+      <div className="relative mt-4">
+        <Link
+          href={`/${locale}/knowledge`}
+          className="inline-flex rounded-full border border-cyan-300/40 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/20"
+        >
+          {labels.knowledgeEntry}
+        </Link>
       </div>
     </header>
   );

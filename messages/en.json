@@ -17,6 +17,7 @@
     "quickStartBody": "If you are browsing casually, start with the year tabs and scenario cards to see what defined each year at a glance.",
     "builderTitle": "For Builders",
     "builderBody": "If you are evaluating tools for implementation, use the filters, search, and detail pages to compare fit, integration cost, and maturity.",
+    "knowledgeEntry": "Open AIGC Knowledge Map",
     "scenariosTitle": "Popular Scenarios",
     "scenariosSubtitle": "Start your discovery from popular use cases and frameworks.",
     "scenarioTitle": "Browse by Task Scenario",
@@ -81,5 +82,25 @@
     "quickFlowBody": "Pick a task scenario first, scan the year-based cards, then open a detail page for the plain summary and official demo.",
     "proFlowTitle": "Professional Review",
     "proFlowBody": "Use difficulty, community size, and tags to narrow candidates, then combine search hits and compare panel signals to assess integration cost and maturity."
+  },
+  "knowledge": {
+    "pageEyebrow": "AIGC Knowledge Map",
+    "pageTitle": "AIGC Connected Knowledge Hub",
+    "pageDescription": "Start from core concepts and terms, then connect to related domains, industry applications, and cross-disciplinary topics to build a complete AIGC mental model.",
+    "statsConcepts": "Core Terms",
+    "statsDomains": "Domains",
+    "statsIndustries": "Industries",
+    "statsCrossDiscipline": "Cross Disciplines",
+    "termsTitle": "Concepts & Terminology",
+    "termsSubtitle": "Understand definitions first, then common misconceptions.",
+    "misconception": "Common Misconception",
+    "domainTitle": "Connected Domain Map",
+    "domainSubtitle": "See how model, system, and application layers connect to real products.",
+    "industryTitle": "Industry Application Matrix",
+    "industrySubtitle": "Map pain points to AIGC capabilities and representative use cases.",
+    "painPoint": "Pain Point",
+    "mapping": "AIGC Capability Mapping",
+    "crossDisciplineTitle": "Disciplines & Interdisciplinary Topics",
+    "crossDisciplineSubtitle": "AIGC is not only about models; it also involves interaction, cognition, law, and design."
   }
 }
