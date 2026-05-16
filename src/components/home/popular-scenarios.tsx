@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import type { Tool } from '@/data/types';
+import { toScenarioSlug } from '@/data/scenario-slug';
 
 type PopularScenariosProps = {
   locale: 'en' | 'zh';
@@ -25,7 +26,7 @@ export function PopularScenarios({ locale, tools, labels }: PopularScenariosProp
 
   for (const tool of tools) {
     for (const category of tool.categories[locale]) {
-      const slug = category.toLowerCase().replace(/\s+/g, '-');
+      const slug = toScenarioSlug(category);
       if (!scenarioMap.has(slug)) {
         scenarioMap.set(slug, { name: category, count: 0 });
       }

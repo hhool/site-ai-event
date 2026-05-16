@@ -5,21 +5,12 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import { tools } from '@/data/tools';
 import { ToolCard } from '@/components/home/tool-card';
 import { getTagDisplay } from '@/data/tag-labels';
+import { normalizeScenarioSlug, toScenarioSlug } from '@/data/scenario-slug';
 import type { Tool } from '@/data/types';
 
 type Params = {
   locale: string;
   scenarioSlug: string;
-};
-
-const toScenarioSlug = (value: string) => value.trim().toLowerCase().replace(/\s+/g, '-');
-
-const normalizeScenarioSlug = (value: string) => {
-  try {
-    return toScenarioSlug(decodeURIComponent(value));
-  } catch {
-    return toScenarioSlug(value);
-  }
 };
 
 const getAllScenarios = (locale: 'en' | 'zh') => {

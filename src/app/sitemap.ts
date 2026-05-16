@@ -1,12 +1,13 @@
 import type { MetadataRoute } from 'next';
 import { tools } from '@/data/tools';
+import { toScenarioSlug } from '@/data/scenario-slug';
 
 const getAllScenarios = (locale: 'en' | 'zh') => {
   const scenarios = new Map<string, { name: string; count: number }>();
 
   for (const tool of tools) {
     for (const category of tool.categories[locale]) {
-      const slug = category.toLowerCase().replace(/\s+/g, '-');
+      const slug = toScenarioSlug(category);
       if (!scenarios.has(slug)) {
         scenarios.set(slug, { name: category, count: 0 });
       }
