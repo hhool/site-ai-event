@@ -56,6 +56,10 @@
     "recommendBecause": "Recommended because you selected",
     "recommendFallback": "Recommended by current trend and popularity",
     "recommendSourceTools": "Source tools",
-    "relevanceScore": "Relevance"
+    "relevanceScore": "Relevance",
+    "relevanceHigh": "High",
+    "relevanceMedium": "Mid",
+    "relevanceLow": "Low",
+    "resetSuggestions": "Reset"
   }
 }

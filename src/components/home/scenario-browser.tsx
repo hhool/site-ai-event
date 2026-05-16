@@ -56,6 +56,10 @@ type ScenarioBrowserProps = {
     recommendFallback: string;
     recommendSourceTools: string;
     relevanceScore: string;
+    relevanceHigh: string;
+    relevanceMedium: string;
+    relevanceLow: string;
+    resetSuggestions: string;
   };
 };
 
@@ -67,6 +71,7 @@ type RecommendedTag = {
   tag: string;
   score: number;
   reasons: string[];
+  reasonPcts: number[];
   contributors: string[];
 };
 
@@ -213,9 +218,10 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
           hits.push(labels.matchInHighlights);
         }
 
+        const normalizedScore = score > 0 ? Math.min(100, Math.round((score / 25) * 100)) : 0;
         if (hits.length > 0) {
           hitMap.set(tool.slug, hits);
-          scoreMap.set(tool.slug, score);
+          scoreMap.set(tool.slug, normalizedScore);
         }
 
         return { tool, score };
@@ -262,24 +268,34 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
         : scenarioFilteredTools.length > 0
           ? scenarioFilteredTools
           : tools;
-    const scored = new Map<string, { score: number; scenarios: Set<string>; contributors: Set<string> }>();
+    const scored = new Map<
+      string,
+      { score: number; scenarioScores: Map<string, number>; contributors: Set<string> }
+    >();
     const active = new Set((searchParams.get('tags') ?? '').split(',').filter(Boolean));
 
     for (const tool of pool) {
-      const scenarioMatchCount = selectedScenarios.filter((scenario) =>
-        tool.categories[locale].includes(scenario),
-      ).length;
-      const scenarioWeight = scenarioMatchCount > 0 ? 1 + scenarioMatchCount * 2 : 1;
       const matchedScenarios = selectedScenarios.filter((scenario) =>
         tool.categories[locale].includes(scenario),
       );
+      const scenarioMatchCount = matchedScenarios.length;
+      const scenarioWeight = scenarioMatchCount > 0 ? 1 + scenarioMatchCount * 2 : 1;
+      const perScenarioWeight = scenarioMatchCount > 0 ? scenarioWeight / scenarioMatchCount : 0;
 
       for (const tag of tool.tags) {
         if (!active.has(tag)) {
-          const current =
-            scored.get(tag) ?? { score: 0, scenarios: new Set<string>(), contributors: new Set<string>() };
+          const current = scored.get(tag) ?? {
+            score: 0,
+            scenarioScores: new Map<string, number>(),
+            contributors: new Set<string>(),
+          };
           current.score += scenarioWeight;
-          matchedScenarios.forEach((scenario) => current.scenarios.add(scenario));
+          matchedScenarios.forEach((scenario) => {
+            current.scenarioScores.set(
+              scenario,
+              (current.scenarioScores.get(scenario) ?? 0) + perScenarioWeight,
+            );
+          });
           current.contributors.add(tool.name);
           scored.set(tag, current);
         }
@@ -288,12 +304,21 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
 
     return [...scored.entries()]
       .sort((a, b) => b[1].score - a[1].score || a[0].localeCompare(b[0]))
-      .map(([tag, value]) => ({
-        tag,
-        score: value.score,
-        reasons: [...value.scenarios].slice(0, 2),
-        contributors: [...value.contributors].slice(0, 3),
-      }));
+      .map(([tag, value]) => {
+        const scenarioEntries = [...value.scenarioScores.entries()]
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 2);
+        const totalScenarioScore = [...value.scenarioScores.values()].reduce((a, b) => a + b, 0);
+        return {
+          tag,
+          score: value.score,
+          reasons: scenarioEntries.map(([s]) => s),
+          reasonPcts: scenarioEntries.map(([, s]) =>
+            totalScenarioScore > 0 ? Math.round((s / totalScenarioScore) * 100) : 0,
+          ),
+          contributors: [...value.contributors].slice(0, 3),
+        };
+      });
   }, [advancedFilteredTools, filteredTools.length, locale, scenarioFilteredTools, searchParams, selectedScenarios, tools]);
 
   const visibleRecommendedTags = useMemo<RecommendedTag[]>(() => {
@@ -529,6 +554,9 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
                       readMore: labels.readMore,
                       stars: labels.stars,
                       relevanceScore: labels.relevanceScore,
+                      relevanceHigh: labels.relevanceHigh,
+                      relevanceMedium: labels.relevanceMedium,
+                      relevanceLow: labels.relevanceLow,
                     }}
                   />
                 ))}
@@ -544,15 +572,29 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
           {visibleRecommendedTags.length > 0 ? (
             <div className="mt-4">
               <p className="mb-2 text-xs tracking-widest text-white/55 uppercase">{labels.noResultHints}</p>
-              {recommendedTags.length > visibleRecommendedTags.length ? (
-                <button
-                  type="button"
-                  onClick={rotateSuggestionBatch}
-                  className="mb-3 rounded-full border border-white/20 px-3 py-1 text-xs text-white/75 transition hover:border-white/40 hover:text-white"
-                >
-                  {labels.nextBatch}
-                </button>
-              ) : null}
+              <div className="mb-3 flex justify-center gap-2">
+                {recommendedTags.length > visibleRecommendedTags.length ? (
+                  <button
+                    type="button"
+                    onClick={rotateSuggestionBatch}
+                    className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/75 transition hover:border-white/40 hover:text-white"
+                  >
+                    {labels.nextBatch}
+                  </button>
+                ) : null}
+                {recentSuggestionSignatures.length > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRecentSuggestionSignatures([]);
+                      setSuggestionBatch(0);
+                    }}
+                    className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/50 transition hover:border-white/35 hover:text-white/75"
+                  >
+                    {labels.resetSuggestions}
+                  </button>
+                ) : null}
+              </div>
               <div className="flex flex-wrap justify-center gap-3">
                 {visibleRecommendedTags.map((item) => (
                   <div key={item.tag} className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-2">
@@ -565,7 +607,9 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
                     </button>
                     <p className="mt-1 max-w-56 text-[11px] text-white/55">
                       {item.reasons.length > 0
-                        ? `${labels.recommendBecause} ${item.reasons.join(' + ')}`
+                        ? `${labels.recommendBecause} ${item.reasons
+                            .map((r, i) => (item.reasonPcts[i] < 100 ? `${r} (${item.reasonPcts[i]}%)` : r))
+                            .join(' + ')}`
                         : labels.recommendFallback}
                     </p>
                     {item.contributors.length > 0 ? (

@@ -56,6 +56,10 @@
     "recommendBecause": "因你选择了",
     "recommendFallback": "基于当前趋势热度推荐",
     "recommendSourceTools": "来源工具",
-    "relevanceScore": "相关度"
+    "relevanceScore": "相关度",
+    "relevanceHigh": "高相关",
+    "relevanceMedium": "中相关",
+    "relevanceLow": "低相关",
+    "resetSuggestions": "重置推荐"
   }
 }

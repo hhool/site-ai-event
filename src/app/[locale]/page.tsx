@@ -111,6 +111,10 @@ export default async function HomePage() {
             recommendFallback: t('common.recommendFallback'),
             recommendSourceTools: t('common.recommendSourceTools'),
             relevanceScore: t('common.relevanceScore'),
+            relevanceHigh: t('common.relevanceHigh'),
+            relevanceMedium: t('common.relevanceMedium'),
+            relevanceLow: t('common.relevanceLow'),
+            resetSuggestions: t('common.resetSuggestions'),
           }}
         />
       </section>

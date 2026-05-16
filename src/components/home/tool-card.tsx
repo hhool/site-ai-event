@@ -19,6 +19,9 @@ type ToolCardProps = {
     readMore: string;
     stars: string;
     relevanceScore?: string;
+    relevanceHigh?: string;
+    relevanceMedium?: string;
+    relevanceLow?: string;
   };
 };
 
@@ -58,6 +61,14 @@ const yearTheme: Record<Tool['year'], string> = {
 };
 
 export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [], relevanceScore, labels }: ToolCardProps) {
+  const tierInfo =
+    typeof relevanceScore === 'number'
+      ? relevanceScore >= 70
+        ? { label: labels.relevanceHigh ?? 'High', cls: 'border-emerald-300/40 bg-emerald-300/10 text-emerald-100' }
+        : relevanceScore >= 40
+          ? { label: labels.relevanceMedium ?? 'Mid', cls: 'border-amber-300/40 bg-amber-300/10 text-amber-100' }
+          : { label: labels.relevanceLow ?? 'Low', cls: 'border-slate-300/30 bg-slate-300/5 text-slate-300' }
+      : null;
   return (
     <motion.article
       initial={{ opacity: 0, y: 22 }}
@@ -80,9 +91,12 @@ export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [],
 
         {matchHints.length > 0 ? (
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {typeof relevanceScore === 'number' ? (
-              <span className="rounded-full border border-emerald-300/35 bg-emerald-300/10 px-2 py-0.5 text-[10px] text-emerald-100">
-                {labels.relevanceScore ?? 'Relevance'}: {relevanceScore}
+            {tierInfo ? (
+              <span
+                className={`rounded-full border px-2 py-0.5 text-[10px] ${tierInfo.cls}`}
+                title={`${labels.relevanceScore ?? 'Relevance'}: ${relevanceScore}`}
+              >
+                {labels.relevanceScore ?? 'Relevance'}: {tierInfo.label}
               </span>
             ) : null}
             {matchHints.map((hint) => (
