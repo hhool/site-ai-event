@@ -20,6 +20,13 @@ test('Chinese scenario page resolves localized slug', async ({ page }) => {
   await expect(page.getByText('高频技术标签')).toBeVisible();
 });
 
+test('Chinese scenario page resolves percent-encoded localized slug', async ({ page }) => {
+  await page.goto('/zh/scenarios/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7');
+  await expect(page).toHaveURL(/\/zh\/scenarios\/.+/);
+  await expect(page.getByRole('heading', { level: 1, name: '开发工具' })).toBeVisible();
+  await expect(page.getByText('高频技术标签')).toBeVisible();
+});
+
 test('detail page opens from English list and shows key blocks', async ({ page }) => {
   await page.goto('/en/tool/llama-2');
   await expect(page).toHaveURL(/\/en\/tool\/llama-2$/);
