@@ -12,12 +12,22 @@ type Params = {
   scenarioSlug: string;
 };
 
+const toScenarioSlug = (value: string) => value.trim().toLowerCase().replace(/\s+/g, '-');
+
+const normalizeScenarioSlug = (value: string) => {
+  try {
+    return toScenarioSlug(decodeURIComponent(value));
+  } catch {
+    return toScenarioSlug(value);
+  }
+};
+
 const getAllScenarios = (locale: 'en' | 'zh') => {
   const scenarios = new Map<string, { name: string; count: number }>();
 
   for (const tool of tools) {
     for (const category of tool.categories[locale]) {
-      const slug = category.toLowerCase().replace(/\s+/g, '-');
+      const slug = toScenarioSlug(category);
       if (!scenarios.has(slug)) {
         scenarios.set(slug, { name: category, count: 0 });
       }
@@ -40,10 +50,11 @@ const getToolsForScenario = (
   scenarioSlug: string,
 ): [string, Tool[]] => {
   const allScenarios = getAllScenarios(locale);
-  const found = allScenarios.find((s) => s.slug === scenarioSlug);
+  const normalizedScenarioSlug = normalizeScenarioSlug(scenarioSlug);
+  const found = allScenarios.find((s) => s.slug === normalizedScenarioSlug);
 
   if (!found) {
-    return [scenarioSlug, []];
+    return [normalizedScenarioSlug, []];
   }
 
   const scenarioName = found.name;
