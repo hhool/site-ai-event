@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type {
   CrossDisciplineTopic,
   IndustryApplication,
@@ -53,8 +53,47 @@ export function KnowledgeExplorer({
   crossTopics,
   labels,
 }: KnowledgeExplorerProps) {
+  const navSections = useMemo(
+    () => [
+      { id: 'knowledge-terms', label: labels.navTerms },
+      { id: 'knowledge-domains', label: labels.navDomains },
+      { id: 'knowledge-industries', label: labels.navIndustries },
+      { id: 'knowledge-cross', label: labels.navCross },
+    ],
+    [labels.navCross, labels.navDomains, labels.navIndustries, labels.navTerms],
+  );
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState(labels.categoryAll);
+  const [activeSection, setActiveSection] = useState(navSections[0]?.id ?? 'knowledge-terms');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible[0]?.target?.id) {
+          setActiveSection(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: '-25% 0px -55% 0px',
+        threshold: [0.2, 0.5, 0.8],
+      },
+    );
+
+    navSections.forEach((section) => {
+      const element = document.getElementById(section.id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [navSections]);
 
   const categories = useMemo(() => {
     return [
@@ -184,10 +223,23 @@ export function KnowledgeExplorer({
 
         <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-white/65">
           <span className="mr-1 text-white/55">{labels.quickNavTitle}</span>
-          <a className="rounded-full border border-white/18 px-2.5 py-1 hover:border-cyan-200/50 hover:text-cyan-100" href="#knowledge-terms">{labels.navTerms}</a>
-          <a className="rounded-full border border-white/18 px-2.5 py-1 hover:border-cyan-200/50 hover:text-cyan-100" href="#knowledge-domains">{labels.navDomains}</a>
-          <a className="rounded-full border border-white/18 px-2.5 py-1 hover:border-cyan-200/50 hover:text-cyan-100" href="#knowledge-industries">{labels.navIndustries}</a>
-          <a className="rounded-full border border-white/18 px-2.5 py-1 hover:border-cyan-200/50 hover:text-cyan-100" href="#knowledge-cross">{labels.navCross}</a>
+          {navSections.map((section) => {
+            const isActive = section.id === activeSection;
+            return (
+              <a
+                key={section.id}
+                className={`rounded-full border px-2.5 py-1 transition ${
+                  isActive
+                    ? 'border-cyan-200 bg-cyan-300/20 text-cyan-100'
+                    : 'border-white/18 hover:border-cyan-200/50 hover:text-cyan-100'
+                }`}
+                href={`#${section.id}`}
+                aria-current={isActive ? 'location' : undefined}
+              >
+                {section.label}
+              </a>
+            );
+          })}
         </div>
       </section>
 

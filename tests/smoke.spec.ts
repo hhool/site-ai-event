@@ -65,3 +65,10 @@ test('Chinese knowledge page supports search and reset', async ({ page }) => {
   await page.getByRole('button', { name: '重置' }).click();
   await expect(page.getByRole('heading', { level: 3, name: '扩散模型' })).toBeVisible();
 });
+
+test('knowledge term related link navigates to list search', async ({ page }) => {
+  await page.goto('/en/knowledge');
+  await page.getByRole('link', { name: 'llm' }).first().click();
+  await expect(page).toHaveURL(/\/en\?q=llm/);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+});
