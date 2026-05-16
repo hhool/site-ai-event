@@ -44,6 +44,9 @@
     "searchLabel": "Keyword Search",
     "searchPlaceholder": "Search tool name or description",
     "searchClear": "Clear",
-    "toolMeta": "Tool Metadata"
+    "toolMeta": "Tool Metadata",
+    "yearStatsTitle": "Year Mix",
+    "yearShare": "Share",
+    "noResultHints": "Try these tags"
   }
 }

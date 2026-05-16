@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { getToolBySlug } from '@/data/tools';
+import { getTagDisplay } from '@/data/tag-labels';
 import { ExternalLinkPill } from '@/components/shared/external-link-pill';
 import { DetailContent } from '@/components/detail/detail-content';
 
@@ -156,7 +157,7 @@ export default async function ToolDetailPage({
                 key={tag}
                 className="rounded-full border border-cyan-400/40 bg-cyan-400/10 px-2.5 py-1 text-[11px] text-cyan-200"
               >
-                {tag}
+                {getTagDisplay(tag, safeLocale)}
               </span>
             ))}
           </div>

@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { Tool } from '@/data/types';
 import { ToolCard } from '@/components/home/tool-card';
 import { AdvancedFilters, useAdvancedFilters } from '@/components/home/advanced-filters';
+import { getTagDisplay } from '@/data/tag-labels';
 
 type ScenarioBrowserProps = {
   locale: 'en' | 'zh';
@@ -43,6 +44,9 @@ type ScenarioBrowserProps = {
     searchLabel: string;
     searchPlaceholder: string;
     searchClear: string;
+    yearStatsTitle: string;
+    yearShare: string;
+    noResultHints: string;
   };
 };
 
@@ -175,8 +179,69 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     return grouped;
   }, [filteredTools, years]);
 
+  const yearStats = useMemo(() => {
+    const total = filteredTools.length;
+    return years.map((year) => {
+      const count = filteredTools.filter((tool) => tool.year === year).length;
+      const ratio = total > 0 ? Math.round((count / total) * 100) : 0;
+      return { year, count, ratio };
+    });
+  }, [filteredTools, years]);
+
+  const recommendedTags = useMemo(() => {
+    if (filteredTools.length > 0) {
+      return [] as string[];
+    }
+
+    const pool = advancedFilteredTools.length > 0 ? advancedFilteredTools : scenarioFilteredTools;
+    const counts = new Map<string, number>();
+    const active = new Set((searchParams.get('tags') ?? '').split(',').filter(Boolean));
+
+    for (const tool of pool) {
+      for (const tag of tool.tags) {
+        if (!active.has(tag)) {
+          counts.set(tag, (counts.get(tag) ?? 0) + 1);
+        }
+      }
+    }
+
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6)
+      .map(([tag]) => tag);
+  }, [advancedFilteredTools, filteredTools.length, scenarioFilteredTools, searchParams]);
+
+  const addRecommendedTag = (tag: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const current = (params.get('tags') ?? '').split(',').filter(Boolean);
+    if (!current.includes(tag)) {
+      params.set('tags', [...current, tag].join(','));
+    }
+    params.delete('q');
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
+
   return (
     <section className="mt-12 space-y-8">
+      <div className="grid gap-3 sm:grid-cols-3">
+        {yearStats.map((stat) => (
+          <div
+            key={stat.year}
+            className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.02] p-4"
+          >
+            <p className="text-xs tracking-widest text-white/55 uppercase">{labels.yearStatsTitle}</p>
+            <p className="mt-1 text-2xl font-semibold text-white">{stat.year}</p>
+            <p className="mt-2 text-sm text-white/80">
+              {labels.toolsMatched}: {stat.count}
+            </p>
+            <p className="text-xs text-cyan-200/90">
+              {labels.yearShare}: {stat.ratio}%
+            </p>
+          </div>
+        ))}
+      </div>
+
       <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:p-6">
         <h2 className="text-2xl font-semibold text-white">{labels.scenarioTitle}</h2>
         <p className="mt-2 text-sm text-white/75 md:text-base">{labels.scenarioSubtitle}</p>
@@ -250,6 +315,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
 
       {/* Advanced Filters Panel */}
       <AdvancedFilters
+        locale={locale}
         tools={tools}
         labels={{
           title: labels.advancedFilters,
@@ -317,6 +383,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
                     tool={tool}
                     locale={locale}
                     index={index}
+                    highlightQuery={searchQuery}
                     labels={{
                       openDemo: labels.openDemo,
                       github: labels.github,
@@ -333,7 +400,24 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
 
       {filteredTools.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-white/20 bg-black/20 p-6 text-center text-sm text-white/70">
-          {labels.noResults}
+          <p>{labels.noResults}</p>
+          {recommendedTags.length > 0 ? (
+            <div className="mt-4">
+              <p className="mb-2 text-xs tracking-widest text-white/55 uppercase">{labels.noResultHints}</p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {recommendedTags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => addRecommendedTag(tag)}
+                    className="rounded-full border border-cyan-400/45 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-200 transition hover:border-cyan-300/70 hover:bg-cyan-300/15"
+                  >
+                    {getTagDisplay(tag, locale)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </section>

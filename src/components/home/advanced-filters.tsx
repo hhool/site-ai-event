@@ -4,8 +4,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo, useCallback, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { Tool } from '@/data/types';
+import { getTagDisplay } from '@/data/tag-labels';
 
 type AdvancedFiltersProps = {
+  locale: 'en' | 'zh';
   tools: Tool[];
   labels: {
     title: string;
@@ -38,7 +40,7 @@ const COMMUNITY_COLORS = {
   large: 'border-violet-500/60 text-violet-300 bg-violet-500/10',
 } as const;
 
-export function AdvancedFilters({ tools, labels }: AdvancedFiltersProps) {
+export function AdvancedFilters({ locale, tools, labels }: AdvancedFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -170,7 +172,7 @@ export function AdvancedFilters({ tools, labels }: AdvancedFiltersProps) {
                 onClick={() => removeTag(tag)}
                 className="rounded-full border border-cyan-400/55 bg-cyan-400/15 px-3 py-1 text-xs text-cyan-200"
               >
-                {tag} x
+                {getTagDisplay(tag, locale)} x
               </button>
             ))}
           </div>
@@ -265,7 +267,7 @@ export function AdvancedFilters({ tools, labels }: AdvancedFiltersProps) {
                           : 'border-white/10 text-white/40 hover:border-white/30 hover:text-white/60'
                       }`}
                     >
-                      {tag}
+                      {getTagDisplay(tag, locale)}
                       <span className="ml-1 opacity-50">({count})</span>
                     </button>
                   );

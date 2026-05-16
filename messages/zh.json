@@ -44,6 +44,9 @@
     "searchLabel": "关键词搜索",
     "searchPlaceholder": "搜索工具名称或描述",
     "searchClear": "清除",
-    "toolMeta": "工具元信息"
+    "toolMeta": "工具元信息",
+    "yearStatsTitle": "年份分布",
+    "yearShare": "占比",
+    "noResultHints": "推荐标签"
   }
 }

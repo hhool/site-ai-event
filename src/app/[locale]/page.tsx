@@ -99,6 +99,9 @@ export default async function HomePage() {
             searchLabel: t('common.searchLabel'),
             searchPlaceholder: t('common.searchPlaceholder'),
             searchClear: t('common.searchClear'),
+            yearStatsTitle: t('common.yearStatsTitle'),
+            yearShare: t('common.yearShare'),
+            noResultHints: t('common.noResultHints'),
           }}
         />
       </section>

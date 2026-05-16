@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { Fragment } from 'react';
 import type { Tool } from '@/data/types';
 import { ExternalLinkPill } from '@/components/shared/external-link-pill';
 
@@ -9,6 +10,7 @@ type ToolCardProps = {
   tool: Tool;
   locale: 'en' | 'zh';
   index: number;
+  highlightQuery?: string;
   labels: {
     openDemo: string;
     github: string;
@@ -17,13 +19,42 @@ type ToolCardProps = {
   };
 };
 
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function highlightText(text: string, query?: string) {
+  const q = (query ?? '').trim();
+  if (!q) {
+    return text;
+  }
+
+  const regex = new RegExp(`(${escapeRegExp(q)})`, 'ig');
+  const parts = text.split(regex);
+  return parts.map((part, idx) => {
+    const isMatch = part.toLowerCase() === q.toLowerCase();
+    if (!isMatch) {
+      return <Fragment key={`${part}-${idx}`}>{part}</Fragment>;
+    }
+
+    return (
+      <mark
+        key={`${part}-${idx}`}
+        className="rounded bg-cyan-300/30 px-1 text-cyan-100"
+      >
+        {part}
+      </mark>
+    );
+  });
+}
+
 const yearTheme: Record<Tool['year'], string> = {
   2023: 'from-sky-500/45 to-cyan-400/35',
   2024: 'from-violet-500/45 to-fuchsia-400/35',
   2025: 'from-orange-500/45 to-amber-400/35',
 };
 
-export function ToolCard({ tool, locale, index, labels }: ToolCardProps) {
+export function ToolCard({ tool, locale, index, highlightQuery, labels }: ToolCardProps) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 22 }}
@@ -39,8 +70,10 @@ export function ToolCard({ tool, locale, index, labels }: ToolCardProps) {
         >
           {tool.year}
         </span>
-        <h3 className="mt-4 text-xl font-medium">{tool.name}</h3>
-        <p className="mt-2 line-clamp-2 text-sm text-white/70">{tool.tagline[locale]}</p>
+        <h3 className="mt-4 text-xl font-medium">{highlightText(tool.name, highlightQuery)}</h3>
+        <p className="mt-2 line-clamp-2 text-sm text-white/70">
+          {highlightText(tool.tagline[locale], highlightQuery)}
+        </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
           {tool.categories[locale].slice(0, 2).map((category) => (
