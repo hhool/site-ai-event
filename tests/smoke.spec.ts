@@ -72,3 +72,10 @@ test('knowledge term related link navigates to list search', async ({ page }) =>
   await expect(page).toHaveURL(/\/en\?q=llm&tags=language-model%2Cgenerative/);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 });
+
+test('Chinese knowledge term related link keeps preset filters', async ({ page }) => {
+  await page.goto('/zh/knowledge');
+  await page.getByRole('link', { name: 'rag' }).first().click();
+  await expect(page).toHaveURL(/\/zh\?q=rag&tags=retrieval%2Cworkflow&difficulty=intermediate/);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+});

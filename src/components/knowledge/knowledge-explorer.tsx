@@ -8,6 +8,7 @@ import type {
   KnowledgeDomain,
   KnowledgeTerm,
 } from '@/data/knowledge';
+import { toolLinkPresets } from '@/data/knowledge-tool-presets';
 
 type KnowledgeExplorerProps = {
   locale: 'en' | 'zh';
@@ -45,20 +46,8 @@ function includesNormalized(value: string, query: string) {
   return value.toLowerCase().includes(query.toLowerCase());
 }
 
-const TOOL_LINK_PRESETS: Record<string, { q?: string; tags?: string[]; difficulty?: 'beginner' | 'intermediate' | 'advanced' }> = {
-  llm: { q: 'llm', tags: ['language-model', 'generative'] },
-  multimodal: { q: 'multimodal', tags: ['multimodal'] },
-  'prompt-engineering': { q: 'prompt', tags: ['workflow'] },
-  rag: { q: 'rag', tags: ['retrieval', 'workflow'], difficulty: 'intermediate' },
-  agent: { q: 'agent', tags: ['ai-agent', 'workflow'], difficulty: 'advanced' },
-  diffusion: { q: 'diffusion', tags: ['image-generation', 'generative'] },
-  'fine-tuning': { q: 'fine tuning', tags: ['instruction-tuned'], difficulty: 'advanced' },
-  inference: { q: 'inference', tags: ['serving', 'inference-engine'] },
-  benchmark: { q: 'benchmark', tags: ['monitoring', 'reasoning'] },
-};
-
 function buildToolSearchHref(locale: 'en' | 'zh', keyword: string) {
-  const preset = TOOL_LINK_PRESETS[keyword];
+  const preset = toolLinkPresets[keyword];
   const params = new URLSearchParams();
 
   if (preset?.q) {
