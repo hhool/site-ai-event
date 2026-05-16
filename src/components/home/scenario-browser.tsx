@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { Tool } from '@/data/types';
 import { ToolCard } from '@/components/home/tool-card';
 
@@ -17,6 +18,10 @@ type ScenarioBrowserProps = {
     scenarioTitle: string;
     scenarioSubtitle: string;
     allScenarios: string;
+    selectedScenarios: string;
+    clearFilters: string;
+    matchAny: string;
+    matchAll: string;
     toolsMatched: string;
     noResults: string;
   };
@@ -28,7 +33,9 @@ type ScenarioOption = {
 };
 
 export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowserProps) {
-  const [activeScenario, setActiveScenario] = useState<string>('all');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const scenarios = useMemo<ScenarioOption[]>(() => {
     const counts = new Map<string, number>();
@@ -43,13 +50,64 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   }, [locale, tools]);
 
+  const scenarioNames = useMemo(() => new Set(scenarios.map((scenario) => scenario.name)), [scenarios]);
+
+  const selectedScenarios = useMemo(() => {
+    const raw = searchParams.get('scenarios');
+    if (!raw) {
+      return [] as string[];
+    }
+
+    return raw
+      .split(',')
+      .map((name) => name.trim())
+      .filter((name) => name.length > 0 && scenarioNames.has(name));
+  }, [scenarioNames, searchParams]);
+
+  const matchMode = searchParams.get('mode') === 'all' ? 'all' : 'any';
+
+  const updateFilters = (nextScenarios: string[], nextMode: 'any' | 'all' = matchMode) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (nextScenarios.length === 0) {
+      params.delete('scenarios');
+    } else {
+      params.set('scenarios', [...nextScenarios].sort((a, b) => a.localeCompare(b)).join(','));
+    }
+
+    if (nextMode === 'all') {
+      params.set('mode', 'all');
+    } else {
+      params.delete('mode');
+    }
+
+    const query = params.toString();
+    router.replace(query.length > 0 ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
+
+  const toggleScenario = (scenarioName: string) => {
+    if (selectedScenarios.includes(scenarioName)) {
+      updateFilters(selectedScenarios.filter((name) => name !== scenarioName));
+      return;
+    }
+
+    updateFilters([...selectedScenarios, scenarioName]);
+  };
+
   const filteredTools = useMemo(() => {
-    if (activeScenario === 'all') {
+    if (selectedScenarios.length === 0) {
       return tools;
     }
 
-    return tools.filter((tool) => tool.categories[locale].includes(activeScenario));
-  }, [activeScenario, locale, tools]);
+    return tools.filter((tool) => {
+      const categories = tool.categories[locale];
+      if (matchMode === 'all') {
+        return selectedScenarios.every((scenario) => categories.includes(scenario));
+      }
+
+      return selectedScenarios.some((scenario) => categories.includes(scenario));
+    });
+  }, [locale, matchMode, selectedScenarios, tools]);
 
   const groupedByYear = useMemo(() => {
     const grouped = new Map<number, Tool[]>();
@@ -65,12 +123,49 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
         <h2 className="text-2xl font-semibold text-white">{labels.scenarioTitle}</h2>
         <p className="mt-2 text-sm text-white/75 md:text-base">{labels.scenarioSubtitle}</p>
 
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-xs md:text-sm">
+          <button
+            type="button"
+            onClick={() => updateFilters(selectedScenarios, 'any')}
+            className={`rounded-full border px-3 py-1.5 transition ${
+              matchMode === 'any'
+                ? 'border-cyan-300/60 bg-cyan-400/20 text-cyan-100'
+                : 'border-white/20 bg-black/20 text-white/75 hover:border-white/40 hover:text-white'
+            }`}
+          >
+            {labels.matchAny}
+          </button>
+          <button
+            type="button"
+            onClick={() => updateFilters(selectedScenarios, 'all')}
+            className={`rounded-full border px-3 py-1.5 transition ${
+              matchMode === 'all'
+                ? 'border-cyan-300/60 bg-cyan-400/20 text-cyan-100'
+                : 'border-white/20 bg-black/20 text-white/75 hover:border-white/40 hover:text-white'
+            }`}
+          >
+            {labels.matchAll}
+          </button>
+          <span className="ml-1 text-white/70">
+            {labels.selectedScenarios}: {selectedScenarios.length}
+          </span>
+          {selectedScenarios.length > 0 ? (
+            <button
+              type="button"
+              onClick={() => updateFilters([])}
+              className="rounded-full border border-white/20 bg-black/20 px-3 py-1.5 text-white/75 transition hover:border-white/40 hover:text-white"
+            >
+              {labels.clearFilters}
+            </button>
+          ) : null}
+        </div>
+
         <div className="mt-5 flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => setActiveScenario('all')}
+            onClick={() => updateFilters([])}
             className={`rounded-full border px-3 py-1.5 text-xs transition md:text-sm ${
-              activeScenario === 'all'
+              selectedScenarios.length === 0
                 ? 'border-cyan-300/60 bg-cyan-400/20 text-cyan-100'
                 : 'border-white/20 bg-black/20 text-white/75 hover:border-white/40 hover:text-white'
             }`}
@@ -82,9 +177,9 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
             <button
               key={scenario.name}
               type="button"
-              onClick={() => setActiveScenario(scenario.name)}
+              onClick={() => toggleScenario(scenario.name)}
               className={`rounded-full border px-3 py-1.5 text-xs transition md:text-sm ${
-                activeScenario === scenario.name
+                selectedScenarios.includes(scenario.name)
                   ? 'border-cyan-300/60 bg-cyan-400/20 text-cyan-100'
                   : 'border-white/20 bg-black/20 text-white/75 hover:border-white/40 hover:text-white'
               }`}

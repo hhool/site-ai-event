@@ -25,6 +25,10 @@ export default async function HomePage() {
             scenarioTitle: t('common.scenarioTitle'),
             scenarioSubtitle: t('common.scenarioSubtitle'),
             allScenarios: t('common.allScenarios'),
+            selectedScenarios: t('common.selectedScenarios'),
+            clearFilters: t('common.clearFilters'),
+            matchAny: t('common.matchAny'),
+            matchAll: t('common.matchAll'),
             toolsMatched: t('common.toolsMatched'),
             noResults: t('common.noResults'),
           }}
