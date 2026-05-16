@@ -54,6 +54,8 @@ type ScenarioBrowserProps = {
     matchInHighlights: string;
     recommendBecause: string;
     recommendFallback: string;
+    recommendSourceTools: string;
+    relevanceScore: string;
   };
 };
 
@@ -65,6 +67,7 @@ type RecommendedTag = {
   tag: string;
   score: number;
   reasons: string[];
+  contributors: string[];
 };
 
 export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowserProps) {
@@ -177,10 +180,12 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
       return {
         tools: advancedFilteredTools,
         hitMap: new Map<string, string[]>(),
+        scoreMap: new Map<string, number>(),
       };
     }
 
     const hitMap = new Map<string, string[]>();
+    const scoreMap = new Map<string, number>();
     const ranked = advancedFilteredTools
       .map((tool) => {
         let score = 0;
@@ -210,6 +215,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
 
         if (hits.length > 0) {
           hitMap.set(tool.slug, hits);
+          scoreMap.set(tool.slug, score);
         }
 
         return { tool, score };
@@ -220,11 +226,13 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     return {
       tools: ranked.map((item) => item.tool),
       hitMap,
+      scoreMap,
     };
   }, [advancedFilteredTools, labels.matchInBackground, labels.matchInHighlights, labels.matchInTagline, labels.matchInTitle, locale, searchQuery]);
 
   const filteredTools = searchEvaluation.tools;
   const searchHitMap = searchEvaluation.hitMap;
+  const searchScoreMap = searchEvaluation.scoreMap;
 
   const groupedByYear = useMemo(() => {
     const grouped = new Map<number, Tool[]>();
@@ -254,7 +262,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
         : scenarioFilteredTools.length > 0
           ? scenarioFilteredTools
           : tools;
-    const scored = new Map<string, { score: number; scenarios: Set<string> }>();
+    const scored = new Map<string, { score: number; scenarios: Set<string>; contributors: Set<string> }>();
     const active = new Set((searchParams.get('tags') ?? '').split(',').filter(Boolean));
 
     for (const tool of pool) {
@@ -268,9 +276,11 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
 
       for (const tag of tool.tags) {
         if (!active.has(tag)) {
-          const current = scored.get(tag) ?? { score: 0, scenarios: new Set<string>() };
+          const current =
+            scored.get(tag) ?? { score: 0, scenarios: new Set<string>(), contributors: new Set<string>() };
           current.score += scenarioWeight;
           matchedScenarios.forEach((scenario) => current.scenarios.add(scenario));
+          current.contributors.add(tool.name);
           scored.set(tag, current);
         }
       }
@@ -282,6 +292,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
         tag,
         score: value.score,
         reasons: [...value.scenarios].slice(0, 2),
+        contributors: [...value.contributors].slice(0, 3),
       }));
   }, [advancedFilteredTools, filteredTools.length, locale, scenarioFilteredTools, searchParams, selectedScenarios, tools]);
 
@@ -311,27 +322,28 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     };
 
     const recent = new Set(recentSuggestionSignatures);
-    let nextCursor = (suggestionBatch + 1) % recommendedTags.length;
-    let nextSignature = getBatchSignature(nextCursor);
-    let foundUnseen = false;
-
+    const unseenCandidates: Array<{ cursor: number; signature: string }> = [];
     for (let step = 1; step <= recommendedTags.length; step += 1) {
       const cursor = (suggestionBatch + step) % recommendedTags.length;
       const signature = getBatchSignature(cursor);
       if (!recent.has(signature)) {
-        nextCursor = cursor;
-        nextSignature = signature;
-        foundUnseen = true;
-        break;
+        unseenCandidates.push({ cursor, signature });
       }
     }
 
-    if (!foundUnseen) {
-      setRecentSuggestionSignatures([nextSignature]);
+    const fallbackCursor = (suggestionBatch + 1) % recommendedTags.length;
+    const fallbackSignature = getBatchSignature(fallbackCursor);
+    const chosen =
+      unseenCandidates.length > 0
+        ? unseenCandidates[Math.floor(Math.random() * unseenCandidates.length)]
+        : { cursor: fallbackCursor, signature: fallbackSignature };
+
+    if (unseenCandidates.length === 0) {
+      setRecentSuggestionSignatures([chosen.signature]);
     } else {
-      setRecentSuggestionSignatures((prev) => [...prev, nextSignature].slice(-8));
+      setRecentSuggestionSignatures((prev) => [...prev, chosen.signature].slice(-8));
     }
-    setSuggestionBatch(nextCursor);
+    setSuggestionBatch(chosen.cursor);
   };
 
   const addRecommendedTag = (tag: string) => {
@@ -510,11 +522,13 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
                     index={index}
                     highlightQuery={searchQuery}
                     matchHints={searchHitMap.get(tool.slug) ?? []}
+                    relevanceScore={searchScoreMap.get(tool.slug)}
                     labels={{
                       openDemo: labels.openDemo,
                       github: labels.github,
                       readMore: labels.readMore,
                       stars: labels.stars,
+                      relevanceScore: labels.relevanceScore,
                     }}
                   />
                 ))}
@@ -554,6 +568,14 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
                         ? `${labels.recommendBecause} ${item.reasons.join(' + ')}`
                         : labels.recommendFallback}
                     </p>
+                    {item.contributors.length > 0 ? (
+                      <p
+                        className="mt-1 max-w-56 truncate text-[10px] text-white/45"
+                        title={`${labels.recommendSourceTools}: ${item.contributors.join(', ')}`}
+                      >
+                        {labels.recommendSourceTools}: {item.contributors.join(', ')}
+                      </p>
+                    ) : null}
                   </div>
                 ))}
               </div>

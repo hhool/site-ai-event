@@ -109,6 +109,8 @@ export default async function HomePage() {
             matchInHighlights: t('common.matchInHighlights'),
             recommendBecause: t('common.recommendBecause'),
             recommendFallback: t('common.recommendFallback'),
+            recommendSourceTools: t('common.recommendSourceTools'),
+            relevanceScore: t('common.relevanceScore'),
           }}
         />
       </section>

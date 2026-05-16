@@ -12,11 +12,13 @@ type ToolCardProps = {
   index: number;
   highlightQuery?: string;
   matchHints?: string[];
+  relevanceScore?: number;
   labels: {
     openDemo: string;
     github: string;
     readMore: string;
     stars: string;
+    relevanceScore?: string;
   };
 };
 
@@ -55,7 +57,7 @@ const yearTheme: Record<Tool['year'], string> = {
   2025: 'from-orange-500/45 to-amber-400/35',
 };
 
-export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [], labels }: ToolCardProps) {
+export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [], relevanceScore, labels }: ToolCardProps) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 22 }}
@@ -78,6 +80,11 @@ export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [],
 
         {matchHints.length > 0 ? (
           <div className="mt-3 flex flex-wrap gap-1.5">
+            {typeof relevanceScore === 'number' ? (
+              <span className="rounded-full border border-emerald-300/35 bg-emerald-300/10 px-2 py-0.5 text-[10px] text-emerald-100">
+                {labels.relevanceScore ?? 'Relevance'}: {relevanceScore}
+              </span>
+            ) : null}
             {matchHints.map((hint) => (
               <span
                 key={hint}

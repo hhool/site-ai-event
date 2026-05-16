@@ -54,6 +54,8 @@
     "matchInBackground": "Matched: Background",
     "matchInHighlights": "Matched: Highlights",
     "recommendBecause": "Recommended because you selected",
-    "recommendFallback": "Recommended by current trend and popularity"
+    "recommendFallback": "Recommended by current trend and popularity",
+    "recommendSourceTools": "Source tools",
+    "relevanceScore": "Relevance"
   }
 }

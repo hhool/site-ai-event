@@ -54,6 +54,8 @@
     "matchInBackground": "命中：背景",
     "matchInHighlights": "命中：亮点",
     "recommendBecause": "因你选择了",
-    "recommendFallback": "基于当前趋势热度推荐"
+    "recommendFallback": "基于当前趋势热度推荐",
+    "recommendSourceTools": "来源工具",
+    "relevanceScore": "相关度"
   }
 }
