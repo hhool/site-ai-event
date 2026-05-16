@@ -13,6 +13,10 @@ type ToolCardProps = {
   highlightQuery?: string;
   matchHints?: string[];
   relevanceScore?: number;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
+  isComparing?: boolean;
+  onToggleCompare?: () => void;
   labels: {
     openDemo: string;
     github: string;
@@ -22,6 +26,8 @@ type ToolCardProps = {
     relevanceHigh?: string;
     relevanceMedium?: string;
     relevanceLow?: string;
+    favorite?: string;
+    addCompare?: string;
   };
 };
 
@@ -60,7 +66,7 @@ const yearTheme: Record<Tool['year'], string> = {
   2025: 'from-orange-500/45 to-amber-400/35',
 };
 
-export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [], relevanceScore, labels }: ToolCardProps) {
+export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [], relevanceScore, isFavorite, onToggleFavorite, isComparing, onToggleCompare, labels }: ToolCardProps) {
   const tierInfo =
     typeof relevanceScore === 'number'
       ? relevanceScore >= 70
@@ -79,6 +85,20 @@ export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [],
     >
       <div className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br opacity-0 blur-md transition group-hover:opacity-80 group-hover:duration-300" />
       <div className="relative">
+        {onToggleFavorite ? (
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); onToggleFavorite(); }}
+            aria-label={labels.favorite ?? 'Favorite'}
+            className="absolute top-0 right-0 text-lg leading-none transition"
+          >
+            {isFavorite ? (
+              <span className="text-amber-300">★</span>
+            ) : (
+              <span className="text-white/20 hover:text-amber-300/70">☆</span>
+            )}
+          </button>
+        ) : null}
         <span
           className={`inline-flex rounded-full bg-gradient-to-r px-3 py-1 text-xs font-medium text-white ${yearTheme[tool.year]}`}
         >
@@ -136,6 +156,19 @@ export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [],
         >
           {labels.readMore}
         </Link>
+        {onToggleCompare ? (
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); onToggleCompare(); }}
+            className={`mt-3 block rounded-full border px-2.5 py-0.5 text-[11px] transition ${
+              isComparing
+                ? 'border-violet-300/50 bg-violet-300/10 text-violet-200'
+                : 'border-white/20 text-white/45 hover:border-white/40 hover:text-white/80'
+            }`}
+          >
+            {isComparing ? '⊗ ' : '⊕ '}{labels.addCompare ?? 'Compare'}
+          </button>
+        ) : null}
       </div>
     </motion.article>
   );

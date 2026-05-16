@@ -53,7 +53,18 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen bg-[#050505] text-white">
       <section className="mx-auto max-w-7xl px-6 py-16 md:py-24">
-        <HomeHero title={t('site.title')} subtitle={t('site.subtitle')} locale={safeLocale} />
+        <HomeHero
+          title={t('site.title')}
+          subtitle={t('site.subtitle')}
+          locale={safeLocale}
+          labels={{
+            quickStartTitle: t('common.quickStartTitle'),
+            quickStartBody: t('common.quickStartBody'),
+            builderTitle: t('common.builderTitle'),
+            builderBody: t('common.builderBody'),
+          }}
+        />
+
         <PopularScenarios
           locale={safeLocale}
           tools={tools}
@@ -115,6 +126,17 @@ export default async function HomePage() {
             relevanceMedium: t('common.relevanceMedium'),
             relevanceLow: t('common.relevanceLow'),
             resetSuggestions: t('common.resetSuggestions'),
+            tagCloudTitle: t('common.tagCloudTitle'),
+            favoritesOnly: t('common.favoritesOnly'),
+            noFavorites: t('common.noFavorites'),
+            favoriteAdd: t('common.favoriteAdd'),
+            compareTitle: t('common.compareTitle'),
+            compareClear: t('common.compareClear'),
+            compareAdd: t('common.compareAdd'),
+            quickFlowTitle: t('common.quickFlowTitle'),
+            quickFlowBody: t('common.quickFlowBody'),
+            proFlowTitle: t('common.proFlowTitle'),
+            proFlowBody: t('common.proFlowBody'),
           }}
         />
       </section>

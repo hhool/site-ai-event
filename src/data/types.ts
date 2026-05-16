@@ -9,10 +9,14 @@ export interface ToolAudience {
 }
 
 export interface ToolDetail {
+  plainSummary: string;
   background: string;
   highlights: ToolHighlight[];
+  useCases: string[];
   community: string;
   audience: ToolAudience[];
+  developerTips: string[];
+  evaluationChecklist: string[];
   coverImage?: string;
 }
 

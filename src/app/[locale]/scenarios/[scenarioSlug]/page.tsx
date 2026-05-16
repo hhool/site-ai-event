@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { tools } from '@/data/tools';
 import { ToolCard } from '@/components/home/tool-card';
+import { getTagDisplay } from '@/data/tag-labels';
 import type { Tool } from '@/data/types';
 
 type Params = {
@@ -144,6 +145,42 @@ export default async function ScenarioPage({
 
   const years = [2025, 2024, 2023] as const;
 
+  const difficultyRank: Record<Tool['difficulty'], number> = {
+    beginner: 0,
+    intermediate: 0,
+    advanced: 0,
+  };
+
+  for (const tool of matchedTools) {
+    difficultyRank[tool.difficulty] += 1;
+  }
+
+  const difficultySummary = (['beginner', 'intermediate', 'advanced'] as const).map((key) => {
+    const count = difficultyRank[key];
+    const ratio = matchedTools.length > 0 ? Math.round((count / matchedTools.length) * 100) : 0;
+    const label =
+      key === 'beginner'
+        ? t('common.filterBeginner')
+        : key === 'intermediate'
+          ? t('common.filterIntermediate')
+          : t('common.filterAdvanced');
+
+    return { key, label, count, ratio };
+  });
+
+  const topTags = (() => {
+    const tagMap = new Map<string, number>();
+    for (const tool of matchedTools) {
+      for (const tag of tool.tags) {
+        tagMap.set(tag, (tagMap.get(tag) ?? 0) + 1);
+      }
+    }
+
+    return [...tagMap.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 6);
+  })();
+
   // Generate JSON-LD structured data
   const schemaData = {
     '@context': 'https://schema.org',
@@ -200,6 +237,97 @@ export default async function ScenarioPage({
               ? `发现 ${matchedTools.length} 个与"${scenarioName}"相关的开源 AI 工具。`
               : `Discover ${matchedTools.length} open-source AI tools related to "${scenarioName}".`}
           </p>
+
+          <div className="mt-6 grid gap-3 md:grid-cols-2">
+            <div className="rounded-2xl border border-cyan-300/20 bg-cyan-300/8 p-4">
+              <p className="text-xs tracking-[0.22em] text-cyan-100/80 uppercase">
+                {safeLocale === 'zh' ? '小白入口' : 'Simple Entry'}
+              </p>
+              <ol className="mt-2 space-y-1 text-sm leading-7 text-white/80">
+                <li>
+                  {safeLocale === 'zh'
+                    ? '1. 先浏览年份分区，看看这个场景在近三年的工具分布变化。'
+                    : '1. Scan year sections to understand how this scenario evolved across three years.'}
+                </li>
+                <li>
+                  {safeLocale === 'zh'
+                    ? '2. 选 1-2 个你听过名字的工具，点击深度解读。'
+                    : '2. Pick 1-2 familiar tools and open their deep-dive pages.'}
+                </li>
+                <li>
+                  {safeLocale === 'zh'
+                    ? '3. 先看一句话理解和典型场景，再决定是否尝试 Demo。'
+                    : '3. Start with plain summary and use cases, then decide whether to try the demo.'}
+                </li>
+              </ol>
+            </div>
+            <div className="rounded-2xl border border-violet-300/20 bg-violet-300/8 p-4">
+              <p className="text-xs tracking-[0.22em] text-violet-100/80 uppercase">
+                {safeLocale === 'zh' ? '专业评估' : 'Professional Review'}
+              </p>
+              <ul className="mt-2 space-y-1 text-sm leading-7 text-white/80">
+                <li>
+                  {safeLocale === 'zh'
+                    ? '优先比较难度分布，判断团队当前能力是否能快速落地。'
+                    : 'Check difficulty mix first to see if your team can deliver quickly.'}
+                </li>
+                <li>
+                  {safeLocale === 'zh'
+                    ? '再看高频标签，确认该场景主流技术路线。'
+                    : 'Review top tags to identify mainstream technical routes.'}
+                </li>
+                <li>
+                  {safeLocale === 'zh'
+                    ? '最后进入详情页，用评估清单确认 PoC 顺序与风险。'
+                    : 'Use deep-dive checklists to prioritize PoCs and identify risks.'}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-3 md:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="text-xs tracking-widest text-white/55 uppercase">
+              {safeLocale === 'zh' ? '场景规模' : 'Scenario Scale'}
+            </p>
+            <p className="mt-2 text-2xl font-semibold text-white">{matchedTools.length}</p>
+            <p className="mt-1 text-sm text-white/70">
+              {safeLocale === 'zh' ? '个可浏览工具' : 'tools available'}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 md:col-span-2">
+            <p className="text-xs tracking-widest text-white/55 uppercase">
+              {safeLocale === 'zh' ? '难度分布信号' : 'Difficulty Signals'}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {difficultySummary.map((item) => (
+                <span
+                  key={item.key}
+                  className="rounded-full border border-white/20 bg-black/25 px-3 py-1 text-xs text-white/80"
+                >
+                  {item.label}: {item.count} ({item.ratio}%)
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+          <p className="text-xs tracking-widest text-white/55 uppercase">
+            {safeLocale === 'zh' ? '高频技术标签' : 'Top Technical Tags'}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {topTags.map(([tag, count]) => (
+              <span
+                key={tag}
+                className="rounded-full border border-cyan-300/35 bg-cyan-300/10 px-3 py-1 text-xs text-cyan-100"
+              >
+                {getTagDisplay(tag, safeLocale)} x {count}
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="mt-12 space-y-12">

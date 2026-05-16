@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 
   const title = `${tool.name} - AI Event`;
-  const description = tool.tagline[safeLocale];
+  const description = tool.detail[safeLocale].plainSummary;
   const url = `https://site-ai-event.vercel.app/${safeLocale}/tool/${slug}`;
 
   return {
@@ -99,7 +99,7 @@ export default async function ToolDetailPage({
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: tool.name,
-    description: tool.tagline[safeLocale],
+    description: tool.detail[safeLocale].plainSummary,
     applicationCategory: 'Multimedia',
     offers: {
       '@type': 'Offer',
@@ -172,9 +172,14 @@ export default async function ToolDetailPage({
         <DetailContent
           detail={detail}
           headings={{
+            plainSummary: t('common.plainSummary'),
+            background: t('common.background'),
             highlights: t('common.highlights'),
+            useCases: t('common.useCases'),
             community: t('common.community'),
             audience: t('common.audience'),
+            developerGuide: t('common.developerGuide'),
+            evaluationChecklist: t('common.evaluationChecklist'),
           }}
         />
       </section>

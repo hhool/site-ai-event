@@ -5,6 +5,9 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { Tool } from '@/data/types';
 import { ToolCard } from '@/components/home/tool-card';
 import { AdvancedFilters, useAdvancedFilters } from '@/components/home/advanced-filters';
+import { TagCloud } from '@/components/home/tag-cloud';
+import { ComparePanel } from '@/components/home/compare-panel';
+import { useFavorites } from '@/hooks/use-favorites';
 import { getTagDisplay } from '@/data/tag-labels';
 
 type ScenarioBrowserProps = {
@@ -60,6 +63,17 @@ type ScenarioBrowserProps = {
     relevanceMedium: string;
     relevanceLow: string;
     resetSuggestions: string;
+    tagCloudTitle: string;
+    favoritesOnly: string;
+    noFavorites: string;
+    favoriteAdd: string;
+    compareTitle: string;
+    compareClear: string;
+    compareAdd: string;
+    quickFlowTitle: string;
+    quickFlowBody: string;
+    proFlowTitle: string;
+    proFlowBody: string;
   };
 };
 
@@ -81,6 +95,9 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
   const searchParams = useSearchParams();
   const [suggestionBatch, setSuggestionBatch] = useState(0);
   const [recentSuggestionSignatures, setRecentSuggestionSignatures] = useState<string[]>([]);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [comparedSlugs, setComparedSlugs] = useState<string[]>([]);
+  const { favorites, toggle: toggleFavorite } = useFavorites();
 
   const scenarios = useMemo<ScenarioOption[]>(() => {
     const counts = new Map<string, number>();
@@ -178,12 +195,19 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
   // Then apply advanced filters (difficulty, communitySize, tags)
   const advancedFilteredTools = useAdvancedFilters(scenarioFilteredTools);
 
+  // Apply favorites-only filter (local state, not URL)
+  const preSearchTools = useMemo(
+    () =>
+      showFavoritesOnly ? advancedFilteredTools.filter((tool) => favorites.has(tool.slug)) : advancedFilteredTools,
+    [advancedFilteredTools, favorites, showFavoritesOnly],
+  );
+
   // Finally apply full-text keyword search with hit-strength ranking.
   const searchEvaluation = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) {
       return {
-        tools: advancedFilteredTools,
+        tools: preSearchTools,
         hitMap: new Map<string, string[]>(),
         scoreMap: new Map<string, number>(),
       };
@@ -191,7 +215,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
 
     const hitMap = new Map<string, string[]>();
     const scoreMap = new Map<string, number>();
-    const ranked = advancedFilteredTools
+    const ranked = preSearchTools
       .map((tool) => {
         let score = 0;
         const hits: string[] = [];
@@ -234,7 +258,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
       hitMap,
       scoreMap,
     };
-  }, [advancedFilteredTools, labels.matchInBackground, labels.matchInHighlights, labels.matchInTagline, labels.matchInTitle, locale, searchQuery]);
+  }, [preSearchTools, labels.matchInBackground, labels.matchInHighlights, labels.matchInTagline, labels.matchInTitle, locale, searchQuery]);
 
   const filteredTools = searchEvaluation.tools;
   const searchHitMap = searchEvaluation.hitMap;
@@ -386,6 +410,17 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
 
   return (
     <section className="mt-12 space-y-8">
+      <div className="grid gap-3 md:grid-cols-2">
+        <div className="rounded-2xl border border-cyan-300/20 bg-cyan-300/8 p-4">
+          <p className="text-xs tracking-[0.22em] text-cyan-100/80 uppercase">{labels.quickFlowTitle}</p>
+          <p className="mt-2 text-sm leading-7 text-white/80">{labels.quickFlowBody}</p>
+        </div>
+        <div className="rounded-2xl border border-violet-300/20 bg-violet-300/8 p-4">
+          <p className="text-xs tracking-[0.22em] text-violet-100/80 uppercase">{labels.proFlowTitle}</p>
+          <p className="mt-2 text-sm leading-7 text-white/80">{labels.proFlowBody}</p>
+        </div>
+      </div>
+
       <div className="grid gap-3 sm:grid-cols-3">
         {yearStats.map((stat) => (
           <div
@@ -519,12 +554,56 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
               {labels.searchClear}
             </button>
           ) : null}
+          <button
+            type="button"
+            onClick={() => setShowFavoritesOnly((prev) => !prev)}
+            className={`shrink-0 rounded-xl border px-3 py-2 text-xs transition ${
+              showFavoritesOnly
+                ? 'border-amber-300/50 bg-amber-300/10 text-amber-200'
+                : 'border-white/20 text-white/55 hover:border-white/40 hover:text-white'
+            }`}
+            title={labels.favoritesOnly}
+          >
+            {showFavoritesOnly ? '★' : '☆'}
+          </button>
         </div>
       </div>
 
+      <TagCloud
+        tools={advancedFilteredTools.length > 0 ? advancedFilteredTools : tools}
+        locale={locale}
+        activeTags={(searchParams.get('tags') ?? '').split(',').filter(Boolean)}
+        onTagClick={(tag) => {
+          const params = new URLSearchParams(searchParams.toString());
+          const current = (params.get('tags') ?? '').split(',').filter(Boolean);
+          if (current.includes(tag)) {
+            const next = current.filter((t) => t !== tag);
+            if (next.length > 0) {
+              params.set('tags', next.join(','));
+            } else {
+              params.delete('tags');
+            }
+          } else {
+            params.set('tags', [...current, tag].join(','));
+          }
+          const qs = params.toString();
+          router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+        }}
+        labels={{ title: labels.tagCloudTitle }}
+      />
+
       <p className="text-sm text-white/70">
         {labels.toolsMatched}: {filteredTools.length}
+        {showFavoritesOnly && favorites.size > 0 ? (
+          <span className="ml-2 text-amber-300/80">★ {favorites.size}</span>
+        ) : null}
       </p>
+
+      {showFavoritesOnly && filteredTools.length === 0 && favorites.size === 0 ? (
+        <p className="rounded-2xl border border-dashed border-amber-300/20 bg-amber-300/5 p-6 text-center text-sm text-amber-200/60">
+          {labels.noFavorites}
+        </p>
+      ) : null}
 
       <div className="space-y-12">
         {years.map((year) => {
@@ -548,6 +627,18 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
                     highlightQuery={searchQuery}
                     matchHints={searchHitMap.get(tool.slug) ?? []}
                     relevanceScore={searchScoreMap.get(tool.slug)}
+                    isFavorite={favorites.has(tool.slug)}
+                    onToggleFavorite={() => toggleFavorite(tool.slug)}
+                    isComparing={comparedSlugs.includes(tool.slug)}
+                    onToggleCompare={() => {
+                      setComparedSlugs((prev) =>
+                        prev.includes(tool.slug)
+                          ? prev.filter((s) => s !== tool.slug)
+                          : prev.length < 3
+                            ? [...prev, tool.slug]
+                            : prev,
+                      );
+                    }}
                     labels={{
                       openDemo: labels.openDemo,
                       github: labels.github,
@@ -557,6 +648,8 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
                       relevanceHigh: labels.relevanceHigh,
                       relevanceMedium: labels.relevanceMedium,
                       relevanceLow: labels.relevanceLow,
+                      favorite: labels.favoriteAdd,
+                      addCompare: labels.compareAdd,
                     }}
                   />
                 ))}
@@ -627,6 +720,20 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
           ) : null}
         </div>
       ) : null}
+
+      <ComparePanel
+        tools={tools}
+        slugs={comparedSlugs}
+        locale={locale}
+        onRemove={(slug) => setComparedSlugs((prev) => prev.filter((s) => s !== slug))}
+        onClear={() => setComparedSlugs([])}
+        labels={{
+          title: labels.compareTitle,
+          clear: labels.compareClear,
+          stars: labels.stars,
+          maxReached: labels.compareAdd,
+        }}
+      />
     </section>
   );
 }

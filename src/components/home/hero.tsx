@@ -4,9 +4,15 @@ type HomeHeroProps = {
   title: string;
   subtitle: string;
   locale: 'en' | 'zh';
+  labels: {
+    quickStartTitle: string;
+    quickStartBody: string;
+    builderTitle: string;
+    builderBody: string;
+  };
 };
 
-export function HomeHero({ title, subtitle, locale }: HomeHeroProps) {
+export function HomeHero({ title, subtitle, locale, labels }: HomeHeroProps) {
   return (
     <header className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-md md:px-10 md:py-14">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(20,184,166,0.25),transparent_35%),radial-gradient(circle_at_88%_6%,rgba(96,165,250,0.22),transparent_32%)]" />
@@ -36,6 +42,17 @@ export function HomeHero({ title, subtitle, locale }: HomeHeroProps) {
             中文
           </Link>
         </nav>
+      </div>
+
+      <div className="relative mt-8 grid gap-3 md:grid-cols-2">
+        <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+          <p className="text-xs tracking-[0.24em] text-cyan-100/80 uppercase">{labels.quickStartTitle}</p>
+          <p className="mt-2 text-sm leading-7 text-white/78">{labels.quickStartBody}</p>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+          <p className="text-xs tracking-[0.24em] text-violet-100/80 uppercase">{labels.builderTitle}</p>
+          <p className="mt-2 text-sm leading-7 text-white/78">{labels.builderBody}</p>
+        </div>
       </div>
     </header>
   );
