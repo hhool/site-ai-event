@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { tools } from '@/data/tools';
 import { ToolCard } from '@/components/home/tool-card';
@@ -63,6 +64,60 @@ export async function generateStaticParams() {
   return [...en, ...zh];
 }
 
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { scenarioSlug } = await params;
+  const locale = (await getLocale()) as 'en' | 'zh';
+  const safeLocale = locale === 'zh' ? 'zh' : 'en';
+
+  const [scenarioName, matchedTools] = getToolsForScenario(safeLocale, scenarioSlug);
+
+  if (matchedTools.length === 0) {
+    return {
+      title: 'Scenario Not Found',
+      description: 'The requested scenario was not found.',
+    };
+  }
+
+  const title =
+    safeLocale === 'zh'
+      ? `${scenarioName} - AI 工具集合`
+      : `${scenarioName} - AI Tools Directory`;
+
+  const description =
+    safeLocale === 'zh'
+      ? `发现 ${matchedTools.length} 个与"${scenarioName}"相关的开源 AI 工具。浏览最新的 AI 技术。`
+      : `Discover ${matchedTools.length} open-source AI tools related to "${scenarioName}". Browse the latest AI technology.`;
+
+  const url = `https://site-ai-event.vercel.app/${safeLocale}/scenarios/${scenarioSlug}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: 'AI Event',
+      locale: safeLocale === 'zh' ? 'zh_CN' : 'en_US',
+      type: 'website',
+      images: [
+        {
+          url: 'https://site-ai-event.vercel.app/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['https://site-ai-event.vercel.app/og-image.png'],
+    },
+  };
+}
+
 export default async function ScenarioPage({
   params,
 }: {
@@ -89,8 +144,47 @@ export default async function ScenarioPage({
 
   const years = [2025, 2024, 2023] as const;
 
+  // Generate JSON-LD structured data
+  const schemaData = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: scenarioName,
+    description:
+      safeLocale === 'zh'
+        ? `发现 ${matchedTools.length} 个与"${scenarioName}"相关的开源 AI 工具。`
+        : `Discover ${matchedTools.length} open-source AI tools related to "${scenarioName}".`,
+    url: `https://site-ai-event.vercel.app/${safeLocale}/scenarios/${scenarioSlug}`,
+    isPartOf: {
+      '@type': 'Website',
+      name: 'AI Event',
+      url: `https://site-ai-event.vercel.app/${safeLocale}`,
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: matchedTools.slice(0, 10).map((tool, index) => ({
+        '@type': 'SoftwareApplication',
+        position: index + 1,
+        name: tool.name,
+        description: tool.tagline[safeLocale],
+        url: `https://site-ai-event.vercel.app/${safeLocale}/tool/${tool.slug}`,
+        applicationCategory: 'Multimedia',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+      })),
+    },
+  };
+
   return (
     <main className="min-h-screen bg-[#050505] text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schemaData),
+        }}
+      />
       <section className="mx-auto max-w-7xl px-6 py-16 md:py-24">
         <Link className="text-sm text-cyan-300" href={`/${safeLocale}`}>
           {t('common.backToList')}
