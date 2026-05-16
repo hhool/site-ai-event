@@ -101,6 +101,11 @@
     "painPoint": "核心痛点",
     "mapping": "AIGC 能力映射",
     "crossDisciplineTitle": "学科与交叉学科",
-    "crossDisciplineSubtitle": "理解 AIGC 不只是技术问题，也涉及交互、认知、法律与设计。"
+    "crossDisciplineSubtitle": "理解 AIGC 不只是技术问题，也涉及交互、认知、法律与设计。",
+    "searchPlaceholder": "搜索术语、领域或行业...",
+    "categoryAll": "全部分类",
+    "resetFilters": "重置",
+    "matchedResults": "匹配条目",
+    "noMatches": "没有找到匹配内容，请尝试其他关键词或重置筛选。"
   }
 }

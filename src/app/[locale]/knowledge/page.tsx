@@ -7,6 +7,7 @@ import {
   knowledgeDomains,
   knowledgeTerms,
 } from '@/data/knowledge';
+import { KnowledgeExplorer } from '@/components/knowledge/knowledge-explorer';
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = (await getLocale()) as 'en' | 'zh';
@@ -55,85 +56,31 @@ export default async function KnowledgePage() {
           <StatCard label={t('knowledge.statsCrossDiscipline')} value={crossDisciplineTopics.length} />
         </div>
 
-        <section className="mt-12">
-          <h2 className="text-2xl font-semibold">{t('knowledge.termsTitle')}</h2>
-          <p className="mt-2 text-sm text-white/70">{t('knowledge.termsSubtitle')}</p>
-          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {knowledgeTerms.map((term) => (
-              <article key={term.slug} className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                <p className="text-xs tracking-widest text-cyan-100/80 uppercase">{term.category[locale]}</p>
-                <h3 className="mt-2 text-lg font-medium">
-                  {term.term[locale]}
-                  {term.abbreviation ? (
-                    <span className="ml-2 text-sm font-normal text-white/60">({term.abbreviation})</span>
-                  ) : null}
-                </h3>
-                <p className="mt-2 text-sm leading-7 text-white/80">{term.definition[locale]}</p>
-                <p className="mt-3 text-xs leading-6 text-amber-200/90">{t('knowledge.misconception')}: {term.misconception[locale]}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-12 grid gap-6 lg:grid-cols-2">
-          <div>
-            <h2 className="text-2xl font-semibold">{t('knowledge.domainTitle')}</h2>
-            <p className="mt-2 text-sm text-white/70">{t('knowledge.domainSubtitle')}</p>
-            <div className="mt-5 space-y-4">
-              {knowledgeDomains.map((domain) => (
-                <article key={domain.slug} className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                  <h3 className="text-lg font-medium">{domain.name[locale]}</h3>
-                  <p className="mt-2 text-sm leading-7 text-white/80">{domain.description[locale]}</p>
-                  <ul className="mt-3 space-y-2">
-                    {domain.keyAbilities.map((ability) => (
-                      <li key={ability.en} className="flex gap-2 text-sm text-white/75">
-                        <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300" />
-                        <span>{ability[locale]}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h2 className="text-2xl font-semibold">{t('knowledge.industryTitle')}</h2>
-            <p className="mt-2 text-sm text-white/70">{t('knowledge.industrySubtitle')}</p>
-            <div className="mt-5 space-y-4">
-              {industryApplications.map((item) => (
-                <article key={item.slug} className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                  <h3 className="text-lg font-medium">{item.industry[locale]}</h3>
-                  <p className="mt-2 text-sm text-white/80">{t('knowledge.painPoint')}: {item.painPoint[locale]}</p>
-                  <p className="mt-2 text-sm text-white/80">{t('knowledge.mapping')}: {item.aigcMapping[locale]}</p>
-                  <ul className="mt-3 space-y-2">
-                    {item.representativeCases.map((example) => (
-                      <li key={example.en} className="text-sm text-cyan-100/85">• {example[locale]}</li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-12">
-          <h2 className="text-2xl font-semibold">{t('knowledge.crossDisciplineTitle')}</h2>
-          <p className="mt-2 text-sm text-white/70">{t('knowledge.crossDisciplineSubtitle')}</p>
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            {crossDisciplineTopics.map((topic) => (
-              <article key={topic.slug} className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                <h3 className="text-lg font-medium">{topic.name[locale]}</h3>
-                <p className="mt-2 text-sm leading-7 text-white/80">{topic.relevance[locale]}</p>
-                <ul className="mt-3 space-y-2">
-                  {topic.commonMethods.map((method) => (
-                    <li key={method.en} className="text-sm text-white/75">• {method[locale]}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </section>
+        <KnowledgeExplorer
+          locale={locale}
+          terms={knowledgeTerms}
+          domains={knowledgeDomains}
+          industries={industryApplications}
+          crossTopics={crossDisciplineTopics}
+          labels={{
+            termsTitle: t('knowledge.termsTitle'),
+            termsSubtitle: t('knowledge.termsSubtitle'),
+            misconception: t('knowledge.misconception'),
+            domainTitle: t('knowledge.domainTitle'),
+            domainSubtitle: t('knowledge.domainSubtitle'),
+            industryTitle: t('knowledge.industryTitle'),
+            industrySubtitle: t('knowledge.industrySubtitle'),
+            painPoint: t('knowledge.painPoint'),
+            mapping: t('knowledge.mapping'),
+            crossDisciplineTitle: t('knowledge.crossDisciplineTitle'),
+            crossDisciplineSubtitle: t('knowledge.crossDisciplineSubtitle'),
+            searchPlaceholder: t('knowledge.searchPlaceholder'),
+            categoryAll: t('knowledge.categoryAll'),
+            resetFilters: t('knowledge.resetFilters'),
+            matchedResults: t('knowledge.matchedResults'),
+            noMatches: t('knowledge.noMatches'),
+          }}
+        />
       </section>
     </main>
   );

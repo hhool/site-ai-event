@@ -101,6 +101,11 @@
     "painPoint": "Pain Point",
     "mapping": "AIGC Capability Mapping",
     "crossDisciplineTitle": "Disciplines & Interdisciplinary Topics",
-    "crossDisciplineSubtitle": "AIGC is not only about models; it also involves interaction, cognition, law, and design."
+    "crossDisciplineSubtitle": "AIGC is not only about models; it also involves interaction, cognition, law, and design.",
+    "searchPlaceholder": "Search concepts, domains, and industries...",
+    "categoryAll": "All Categories",
+    "resetFilters": "Reset",
+    "matchedResults": "Matched items",
+    "noMatches": "No matching content found. Try a different keyword or reset filters."
   }
 }
