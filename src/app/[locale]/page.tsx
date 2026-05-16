@@ -102,6 +102,11 @@ export default async function HomePage() {
             yearStatsTitle: t('common.yearStatsTitle'),
             yearShare: t('common.yearShare'),
             noResultHints: t('common.noResultHints'),
+            nextBatch: t('common.nextBatch'),
+            matchInTitle: t('common.matchInTitle'),
+            matchInTagline: t('common.matchInTagline'),
+            matchInBackground: t('common.matchInBackground'),
+            matchInHighlights: t('common.matchInHighlights'),
           }}
         />
       </section>

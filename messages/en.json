@@ -47,6 +47,11 @@
     "toolMeta": "Tool Metadata",
     "yearStatsTitle": "Year Mix",
     "yearShare": "Share",
-    "noResultHints": "Try these tags"
+    "noResultHints": "Try these tags",
+    "nextBatch": "Shuffle Suggestions",
+    "matchInTitle": "Matched: Name",
+    "matchInTagline": "Matched: Tagline",
+    "matchInBackground": "Matched: Background",
+    "matchInHighlights": "Matched: Highlights"
   }
 }

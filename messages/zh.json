@@ -47,6 +47,11 @@
     "toolMeta": "工具元信息",
     "yearStatsTitle": "年份分布",
     "yearShare": "占比",
-    "noResultHints": "推荐标签"
+    "noResultHints": "推荐标签",
+    "nextBatch": "换一批",
+    "matchInTitle": "命中：名称",
+    "matchInTagline": "命中：简介",
+    "matchInBackground": "命中：背景",
+    "matchInHighlights": "命中：亮点"
   }
 }

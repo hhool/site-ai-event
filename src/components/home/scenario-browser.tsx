@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { Tool } from '@/data/types';
 import { ToolCard } from '@/components/home/tool-card';
@@ -47,6 +47,11 @@ type ScenarioBrowserProps = {
     yearStatsTitle: string;
     yearShare: string;
     noResultHints: string;
+    nextBatch: string;
+    matchInTitle: string;
+    matchInTagline: string;
+    matchInBackground: string;
+    matchInHighlights: string;
   };
 };
 
@@ -59,6 +64,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [suggestionBatch, setSuggestionBatch] = useState(0);
 
   const scenarios = useMemo<ScenarioOption[]>(() => {
     const counts = new Map<string, number>();
@@ -131,6 +137,11 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
 
+  const updateSearchWithReset = (query: string) => {
+    setSuggestionBatch(0);
+    updateSearch(query);
+  };
+
   // Apply scenario filter first
   const scenarioFilteredTools = useMemo(() => {
     if (selectedScenarios.length === 0) {
@@ -179,6 +190,40 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     return grouped;
   }, [filteredTools, years]);
 
+  const searchHitMap = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    const hitMap = new Map<string, string[]>();
+    if (!q) {
+      return hitMap;
+    }
+
+    for (const tool of filteredTools) {
+      const hits: string[] = [];
+      if (tool.name.toLowerCase().includes(q)) {
+        hits.push(labels.matchInTitle);
+      }
+      if (tool.tagline[locale].toLowerCase().includes(q)) {
+        hits.push(labels.matchInTagline);
+      }
+      if (tool.detail[locale].background.toLowerCase().includes(q)) {
+        hits.push(labels.matchInBackground);
+      }
+      const highlightJoined = tool.detail[locale].highlights
+        .map((h) => `${h.title} ${h.desc}`)
+        .join(' ')
+        .toLowerCase();
+      if (highlightJoined.includes(q)) {
+        hits.push(labels.matchInHighlights);
+      }
+
+      if (hits.length > 0) {
+        hitMap.set(tool.slug, hits);
+      }
+    }
+
+    return hitMap;
+  }, [filteredTools, labels.matchInBackground, labels.matchInHighlights, labels.matchInTagline, labels.matchInTitle, locale, searchQuery]);
+
   const yearStats = useMemo(() => {
     const total = filteredTools.length;
     return years.map((year) => {
@@ -193,23 +238,43 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
       return [] as string[];
     }
 
-    const pool = advancedFilteredTools.length > 0 ? advancedFilteredTools : scenarioFilteredTools;
-    const counts = new Map<string, number>();
+    const pool =
+      advancedFilteredTools.length > 0
+        ? advancedFilteredTools
+        : scenarioFilteredTools.length > 0
+          ? scenarioFilteredTools
+          : tools;
+    const scores = new Map<string, number>();
     const active = new Set((searchParams.get('tags') ?? '').split(',').filter(Boolean));
 
     for (const tool of pool) {
+      const scenarioMatchCount = selectedScenarios.filter((scenario) =>
+        tool.categories[locale].includes(scenario),
+      ).length;
+      const scenarioWeight = scenarioMatchCount > 0 ? 1 + scenarioMatchCount * 2 : 1;
+
       for (const tag of tool.tags) {
         if (!active.has(tag)) {
-          counts.set(tag, (counts.get(tag) ?? 0) + 1);
+          scores.set(tag, (scores.get(tag) ?? 0) + scenarioWeight);
         }
       }
     }
 
-    return [...counts.entries()]
+    return [...scores.entries()]
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 6)
       .map(([tag]) => tag);
-  }, [advancedFilteredTools, filteredTools.length, scenarioFilteredTools, searchParams]);
+  }, [advancedFilteredTools, filteredTools.length, locale, scenarioFilteredTools, searchParams, selectedScenarios, tools]);
+
+  const visibleRecommendedTags = useMemo(() => {
+    if (recommendedTags.length === 0) {
+      return [] as string[];
+    }
+
+    const batchSize = 6;
+    const start = (suggestionBatch * batchSize) % recommendedTags.length;
+    const ordered = [...recommendedTags.slice(start), ...recommendedTags.slice(0, start)];
+    return ordered.slice(0, Math.min(batchSize, recommendedTags.length));
+  }, [recommendedTags, suggestionBatch]);
 
   const addRecommendedTag = (tag: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -344,14 +409,14 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
           <input
             type="text"
             value={searchQuery}
-            onChange={(event) => updateSearch(event.target.value)}
+            onChange={(event) => updateSearchWithReset(event.target.value)}
             placeholder={labels.searchPlaceholder}
             className="w-full rounded-xl border border-white/15 bg-black/25 px-3 py-2 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-cyan-300/60"
           />
           {searchQuery ? (
             <button
               type="button"
-              onClick={() => updateSearch('')}
+              onClick={() => updateSearchWithReset('')}
               className="rounded-xl border border-white/20 px-3 py-2 text-xs text-white/75 transition hover:border-white/40 hover:text-white"
             >
               {labels.searchClear}
@@ -384,6 +449,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
                     locale={locale}
                     index={index}
                     highlightQuery={searchQuery}
+                    matchHints={searchHitMap.get(tool.slug) ?? []}
                     labels={{
                       openDemo: labels.openDemo,
                       github: labels.github,
@@ -401,11 +467,20 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
       {filteredTools.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-white/20 bg-black/20 p-6 text-center text-sm text-white/70">
           <p>{labels.noResults}</p>
-          {recommendedTags.length > 0 ? (
+          {visibleRecommendedTags.length > 0 ? (
             <div className="mt-4">
               <p className="mb-2 text-xs tracking-widest text-white/55 uppercase">{labels.noResultHints}</p>
+              {recommendedTags.length > visibleRecommendedTags.length ? (
+                <button
+                  type="button"
+                  onClick={() => setSuggestionBatch((prev) => prev + 1)}
+                  className="mb-3 rounded-full border border-white/20 px-3 py-1 text-xs text-white/75 transition hover:border-white/40 hover:text-white"
+                >
+                  {labels.nextBatch}
+                </button>
+              ) : null}
               <div className="flex flex-wrap justify-center gap-2">
-                {recommendedTags.map((tag) => (
+                {visibleRecommendedTags.map((tag) => (
                   <button
                     key={tag}
                     type="button"

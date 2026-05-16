@@ -11,6 +11,7 @@ type ToolCardProps = {
   locale: 'en' | 'zh';
   index: number;
   highlightQuery?: string;
+  matchHints?: string[];
   labels: {
     openDemo: string;
     github: string;
@@ -54,7 +55,7 @@ const yearTheme: Record<Tool['year'], string> = {
   2025: 'from-orange-500/45 to-amber-400/35',
 };
 
-export function ToolCard({ tool, locale, index, highlightQuery, labels }: ToolCardProps) {
+export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [], labels }: ToolCardProps) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 22 }}
@@ -74,6 +75,19 @@ export function ToolCard({ tool, locale, index, highlightQuery, labels }: ToolCa
         <p className="mt-2 line-clamp-2 text-sm text-white/70">
           {highlightText(tool.tagline[locale], highlightQuery)}
         </p>
+
+        {matchHints.length > 0 ? (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {matchHints.map((hint) => (
+              <span
+                key={hint}
+                className="rounded-full border border-cyan-300/35 bg-cyan-300/10 px-2 py-0.5 text-[10px] text-cyan-100"
+              >
+                {hint}
+              </span>
+            ))}
+          </div>
+        ) : null}
 
         <div className="mt-4 flex flex-wrap gap-2">
           {tool.categories[locale].slice(0, 2).map((category) => (
