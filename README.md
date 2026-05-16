@@ -102,6 +102,8 @@ pnpm format:check
 - Operations index (ZH): [docs/ways-of-work/operations/index.zh.md](docs/ways-of-work/operations/index.zh.md)
 - Operations process plan (EN): [docs/ways-of-work/operations/operations-process-plan.md](docs/ways-of-work/operations/operations-process-plan.md)
 - Operations process plan (ZH): [docs/ways-of-work/operations/operations-process-plan.zh.md](docs/ways-of-work/operations/operations-process-plan.zh.md)
+- Operations cadence workflow: [.github/workflows/ops-rhythm.yml](.github/workflows/ops-rhythm.yml)
+  - Creates weekly and monthly operations reporting issues on schedule or manual trigger
 - Stale workflow: [.github/workflows/stale.yml](.github/workflows/stale.yml)
   - Marks inactive issues/PRs as stale after 21 days
   - Closes stale issues/PRs after 7 more days of inactivity

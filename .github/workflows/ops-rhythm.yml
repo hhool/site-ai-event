@@ -1,0 +1,122 @@
+name: Operations Rhythm
+
+on:
+  schedule:
+    - cron: '0 1 * * 1'
+    - cron: '5 1 1 * *'
+  workflow_dispatch:
+    inputs:
+      period:
+        description: Which cadence issue to create
+        required: true
+        default: weekly
+        type: choice
+        options:
+          - weekly
+          - monthly
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  create_ops_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create weekly or monthly ops issue
+        uses: actions/github-script@v7
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+          PERIOD_INPUT: ${{ github.event.inputs.period }}
+        with:
+          script: |
+            const schedule = process.env.SCHEDULE || "";
+            const input = process.env.PERIOD_INPUT || "";
+
+            let period = "weekly";
+            if (input === "weekly" || input === "monthly") {
+              period = input;
+            } else if (schedule === "5 1 1 * *") {
+              period = "monthly";
+            }
+
+            const now = new Date();
+            const isoDate = now.toISOString().slice(0, 10);
+            const title = period === "monthly"
+              ? `[Ops][Monthly] ${isoDate} stability report`
+              : `[Ops][Weekly] ${isoDate} operations report`;
+
+            const labels = ["operations", period === "monthly" ? "monthly" : "weekly", "report"];
+
+            for (const name of labels) {
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name,
+                });
+              } catch (error) {
+                if (error.status === 404) {
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name,
+                    color: "0e8a16",
+                    description: `Auto-generated ${name} label for operations cadence`,
+                  });
+                } else {
+                  throw error;
+                }
+              }
+            }
+
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              per_page: 100,
+            });
+
+            const exists = open.data.some((issue) => issue.title === title);
+            if (exists) {
+              core.info(`Issue already exists: ${title}`);
+              return;
+            }
+
+            const body = period === "monthly"
+              ? [
+                  "Auto-created by operations cadence workflow.",
+                  "",
+                  "Please complete the monthly stability report:",
+                  "- docs/ways-of-work/operations/monthly-stability-report-template.md",
+                  "- docs/ways-of-work/operations/monthly-stability-report-template.zh.md",
+                  "",
+                  "Checklist:",
+                  "- [ ] Collect reliability KPIs",
+                  "- [ ] Summarize incidents and learnings",
+                  "- [ ] Confirm next-month actions with owners",
+                  "- [ ] Link final report in this issue",
+                ].join("\n")
+              : [
+                  "Auto-created by operations cadence workflow.",
+                  "",
+                  "Please complete the weekly operations report:",
+                  "- docs/ways-of-work/operations/weekly-ops-report-template.md",
+                  "- docs/ways-of-work/operations/weekly-ops-report-template.zh.md",
+                  "",
+                  "Checklist:",
+                  "- [ ] Update active incidents and status",
+                  "- [ ] Summarize release and change health",
+                  "- [ ] Track open risks and blockers",
+                  "- [ ] Link final report in this issue",
+                ].join("\n");
+
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels,
+            });
+
+            core.info(`Created issue #${issue.data.number}: ${title}`);
