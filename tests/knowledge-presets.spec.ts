@@ -8,10 +8,7 @@ test('knowledge tool presets only reference existing tool tags', () => {
 
   for (const [key, preset] of Object.entries(toolLinkPresets)) {
     for (const tag of preset.tags ?? []) {
-      expect(
-        toolTags.has(tag),
-        `Preset "${key}" references unknown tag "${tag}"`,
-      ).toBeTruthy();
+      expect(toolTags.has(tag), `Preset "${key}" references unknown tag "${tag}"`).toBeTruthy();
     }
   }
 });
