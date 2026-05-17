@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Annual Open-Source AI Event',
   description: 'Record annual phenomenon-level open-source AI tools.',
+  metadataBase: new URL('https://site-ai-event.vercel.app'),
 };
 
 export default function RootLayout({
