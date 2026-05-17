@@ -28,7 +28,9 @@ export function DetailContent({ detail, headings }: DetailContentProps) {
           transition={{ duration: 0.35 }}
           className="rounded-2xl border border-cyan-300/20 bg-cyan-300/8 p-5 md:col-span-3"
         >
-          <p className="text-xs tracking-[0.24em] text-cyan-100/80 uppercase">{headings.plainSummary}</p>
+          <p className="text-xs tracking-[0.24em] text-cyan-100/80 uppercase">
+            {headings.plainSummary}
+          </p>
           <p className="mt-3 leading-8 text-white/90">{detail.plainSummary}</p>
         </motion.section>
 
@@ -39,7 +41,9 @@ export function DetailContent({ detail, headings }: DetailContentProps) {
           transition={{ duration: 0.35, delay: 0.05 }}
           className="rounded-2xl border border-violet-300/20 bg-violet-300/8 p-5 md:col-span-2"
         >
-          <p className="text-xs tracking-[0.24em] text-violet-100/80 uppercase">{headings.developerGuide}</p>
+          <p className="text-xs tracking-[0.24em] text-violet-100/80 uppercase">
+            {headings.developerGuide}
+          </p>
           <ul className="mt-3 space-y-3 text-sm text-white/78">
             {detail.developerTips.map((tip) => (
               <li key={tip} className="flex gap-2">
@@ -82,7 +86,10 @@ export function DetailContent({ detail, headings }: DetailContentProps) {
       <h2 className="mt-10 text-2xl font-medium">{headings.useCases}</h2>
       <ul className="mt-4 grid gap-3 md:grid-cols-2">
         {detail.useCases.map((item) => (
-          <li key={item} className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/80">
+          <li
+            key={item}
+            className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-7 text-white/80"
+          >
             {item}
           </li>
         ))}

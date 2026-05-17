@@ -47,11 +47,15 @@ export function HomeHero({ title, subtitle, locale, labels }: HomeHeroProps) {
 
       <div className="relative mt-8 grid gap-3 md:grid-cols-2">
         <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-          <p className="text-xs tracking-[0.24em] text-cyan-100/80 uppercase">{labels.quickStartTitle}</p>
+          <p className="text-xs tracking-[0.24em] text-cyan-100/80 uppercase">
+            {labels.quickStartTitle}
+          </p>
           <p className="mt-2 text-sm leading-7 text-white/78">{labels.quickStartBody}</p>
         </div>
         <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-          <p className="text-xs tracking-[0.24em] text-violet-100/80 uppercase">{labels.builderTitle}</p>
+          <p className="text-xs tracking-[0.24em] text-violet-100/80 uppercase">
+            {labels.builderTitle}
+          </p>
           <p className="mt-2 text-sm leading-7 text-white/78">{labels.builderBody}</p>
         </div>
       </div>

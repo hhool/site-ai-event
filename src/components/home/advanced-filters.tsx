@@ -147,14 +147,15 @@ export function AdvancedFilters({ locale, tools, labels }: AdvancedFiltersProps)
 
       {hasFilters ? (
         <div className="mb-4 space-y-2">
-          <p className="text-xs text-white/50 uppercase tracking-widest">{labels.activeFilters}</p>
+          <p className="text-xs tracking-widest text-white/50 uppercase">{labels.activeFilters}</p>
           <div className="flex flex-wrap gap-2">
             {difficulty !== 'any' ? (
               <button
                 onClick={() => updateParam('difficulty', null)}
                 className="rounded-full border border-emerald-500/50 bg-emerald-500/15 px-3 py-1 text-xs text-emerald-200"
               >
-                {labels.difficultyLabel}: {difficultyLabelMap[difficulty as keyof typeof difficultyLabelMap]} x
+                {labels.difficultyLabel}:{' '}
+                {difficultyLabelMap[difficulty as keyof typeof difficultyLabelMap]} x
               </button>
             ) : null}
             {communitySize !== 'any' ? (
@@ -191,7 +192,7 @@ export function AdvancedFilters({ locale, tools, labels }: AdvancedFiltersProps)
           >
             {/* Difficulty */}
             <div className="mb-4">
-              <p className="mb-2 text-xs text-white/50 uppercase tracking-widest">
+              <p className="mb-2 text-xs tracking-widest text-white/50 uppercase">
                 {labels.difficultyLabel}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -221,7 +222,7 @@ export function AdvancedFilters({ locale, tools, labels }: AdvancedFiltersProps)
 
             {/* Community Size */}
             <div className="mb-4">
-              <p className="mb-2 text-xs text-white/50 uppercase tracking-widest">
+              <p className="mb-2 text-xs tracking-widest text-white/50 uppercase">
                 {labels.communitySizeLabel}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -251,7 +252,7 @@ export function AdvancedFilters({ locale, tools, labels }: AdvancedFiltersProps)
 
             {/* Tags */}
             <div>
-              <p className="mb-2 text-xs text-white/50 uppercase tracking-widest">
+              <p className="mb-2 text-xs tracking-widest text-white/50 uppercase">
                 {labels.tagsLabel}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -261,7 +262,7 @@ export function AdvancedFilters({ locale, tools, labels }: AdvancedFiltersProps)
                     <button
                       key={tag}
                       onClick={() => toggleTag(tag)}
-                      className={`rounded-full border px-3 py-1 text-xs transition-all cursor-pointer ${
+                      className={`cursor-pointer rounded-full border px-3 py-1 text-xs transition-all ${
                         isActive
                           ? 'border-cyan-400/60 bg-cyan-400/15 text-cyan-300'
                           : 'border-white/10 text-white/40 hover:border-white/30 hover:text-white/60'

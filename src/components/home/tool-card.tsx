@@ -50,10 +50,7 @@ function highlightText(text: string, query?: string) {
     }
 
     return (
-      <mark
-        key={`${part}-${idx}`}
-        className="rounded bg-cyan-300/30 px-1 text-cyan-100"
-      >
+      <mark key={`${part}-${idx}`} className="rounded bg-cyan-300/30 px-1 text-cyan-100">
         {part}
       </mark>
     );
@@ -66,14 +63,35 @@ const yearTheme: Record<Tool['year'], string> = {
   2025: 'from-orange-500/45 to-amber-400/35',
 };
 
-export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [], relevanceScore, isFavorite, onToggleFavorite, isComparing, onToggleCompare, labels }: ToolCardProps) {
+export function ToolCard({
+  tool,
+  locale,
+  index,
+  highlightQuery,
+  matchHints = [],
+  relevanceScore,
+  isFavorite,
+  onToggleFavorite,
+  isComparing,
+  onToggleCompare,
+  labels,
+}: ToolCardProps) {
   const tierInfo =
     typeof relevanceScore === 'number'
       ? relevanceScore >= 70
-        ? { label: labels.relevanceHigh ?? 'High', cls: 'border-emerald-300/40 bg-emerald-300/10 text-emerald-100' }
+        ? {
+            label: labels.relevanceHigh ?? 'High',
+            cls: 'border-emerald-300/40 bg-emerald-300/10 text-emerald-100',
+          }
         : relevanceScore >= 40
-          ? { label: labels.relevanceMedium ?? 'Mid', cls: 'border-amber-300/40 bg-amber-300/10 text-amber-100' }
-          : { label: labels.relevanceLow ?? 'Low', cls: 'border-slate-300/30 bg-slate-300/5 text-slate-300' }
+          ? {
+              label: labels.relevanceMedium ?? 'Mid',
+              cls: 'border-amber-300/40 bg-amber-300/10 text-amber-100',
+            }
+          : {
+              label: labels.relevanceLow ?? 'Low',
+              cls: 'border-slate-300/30 bg-slate-300/5 text-slate-300',
+            }
       : null;
   return (
     <motion.article
@@ -88,7 +106,10 @@ export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [],
         {onToggleFavorite ? (
           <button
             type="button"
-            onClick={(e) => { e.preventDefault(); onToggleFavorite(); }}
+            onClick={(e) => {
+              e.preventDefault();
+              onToggleFavorite();
+            }}
             aria-label={labels.favorite ?? 'Favorite'}
             className="absolute top-0 right-0 text-lg leading-none transition"
           >
@@ -159,14 +180,18 @@ export function ToolCard({ tool, locale, index, highlightQuery, matchHints = [],
         {onToggleCompare ? (
           <button
             type="button"
-            onClick={(e) => { e.preventDefault(); onToggleCompare(); }}
+            onClick={(e) => {
+              e.preventDefault();
+              onToggleCompare();
+            }}
             className={`mt-3 block rounded-full border px-2.5 py-0.5 text-[11px] transition ${
               isComparing
                 ? 'border-violet-300/50 bg-violet-300/10 text-violet-200'
                 : 'border-white/20 text-white/45 hover:border-white/40 hover:text-white/80'
             }`}
           >
-            {isComparing ? '⊗ ' : '⊕ '}{labels.addCompare ?? 'Compare'}
+            {isComparing ? '⊗ ' : '⊕ '}
+            {labels.addCompare ?? 'Compare'}
           </button>
         ) : null}
       </div>

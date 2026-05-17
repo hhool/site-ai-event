@@ -36,10 +36,7 @@ const getAllScenarios = (locale: 'en' | 'zh') => {
     .sort((a, b) => b.count - a.count);
 };
 
-const getToolsForScenario = (
-  locale: 'en' | 'zh',
-  scenarioSlug: string,
-): [string, Tool[]] => {
+const getToolsForScenario = (locale: 'en' | 'zh', scenarioSlug: string): [string, Tool[]] => {
   const allScenarios = getAllScenarios(locale);
   const normalizedScenarioSlug = normalizeScenarioSlug(scenarioSlug);
   const found = allScenarios.find((s) => s.slug === normalizedScenarioSlug);
@@ -82,9 +79,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   }
 
   const title =
-    safeLocale === 'zh'
-      ? `${scenarioName} - AI 工具集合`
-      : `${scenarioName} - AI Tools Directory`;
+    safeLocale === 'zh' ? `${scenarioName} - AI 工具集合` : `${scenarioName} - AI Tools Directory`;
 
   const description =
     safeLocale === 'zh'
@@ -121,11 +116,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   };
 }
 
-export default async function ScenarioPage({
-  params,
-}: {
-  params: Promise<Params>;
-}) {
+export default async function ScenarioPage({ params }: { params: Promise<Params> }) {
   const { scenarioSlug } = await params;
   const locale = await getLocale();
   const safeLocale = locale === 'zh' ? 'zh' : 'en';

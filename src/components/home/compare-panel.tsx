@@ -17,8 +17,17 @@ type ComparePanelProps = {
   };
 };
 
-export function ComparePanel({ tools, slugs, locale, onRemove, onClear, labels }: ComparePanelProps) {
-  const selected = slugs.map((slug) => tools.find((t) => t.slug === slug)).filter(Boolean) as Tool[];
+export function ComparePanel({
+  tools,
+  slugs,
+  locale,
+  onRemove,
+  onClear,
+  labels,
+}: ComparePanelProps) {
+  const selected = slugs
+    .map((slug) => tools.find((t) => t.slug === slug))
+    .filter(Boolean) as Tool[];
 
   return (
     <AnimatePresence>

@@ -38,12 +38,16 @@ test('detail page opens from English list and shows key blocks', async ({ page }
 
 test('knowledge page supports search and filtering', async ({ page }) => {
   await page.goto('/en/knowledge');
-  await expect(page.getByRole('heading', { level: 1, name: 'AIGC Connected Knowledge Hub' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'AIGC Connected Knowledge Hub' }),
+  ).toBeVisible();
 
   const search = page.getByPlaceholder('Search concepts, domains, and industries...');
   await search.fill('RAG');
 
-  await expect(page.getByRole('heading', { level: 3, name: 'Retrieval-Augmented Generation' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 3, name: 'Retrieval-Augmented Generation' }),
+  ).toBeVisible();
   await expect(page.getByRole('heading', { level: 3, name: 'Diffusion Model' })).toHaveCount(0);
   await expect(page.getByText('Matched items:')).toBeVisible();
 

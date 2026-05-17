@@ -118,17 +118,15 @@ export function KnowledgeExplorer({
   }, [navSections]);
 
   const categories = useMemo(() => {
-    return [
-      labels.categoryAll,
-      ...new Set(terms.map((term) => term.category[locale])),
-    ];
+    return [labels.categoryAll, ...new Set(terms.map((term) => term.category[locale]))];
   }, [labels.categoryAll, locale, terms]);
 
   const normalizedQuery = query.trim().toLowerCase();
 
   const filteredTerms = useMemo(() => {
     return terms.filter((term) => {
-      const categoryMatch = activeCategory === labels.categoryAll || term.category[locale] === activeCategory;
+      const categoryMatch =
+        activeCategory === labels.categoryAll || term.category[locale] === activeCategory;
       if (!categoryMatch) {
         return false;
       }
@@ -188,7 +186,10 @@ export function KnowledgeExplorer({
   }, [crossTopics, locale, normalizedQuery]);
 
   const totalMatches =
-    filteredTerms.length + filteredDomains.length + filteredIndustries.length + filteredCrossTopics.length;
+    filteredTerms.length +
+    filteredDomains.length +
+    filteredIndustries.length +
+    filteredCrossTopics.length;
 
   const hasActiveFilters = normalizedQuery.length > 0 || activeCategory !== labels.categoryAll;
 
@@ -271,12 +272,19 @@ export function KnowledgeExplorer({
         {filteredTerms.length > 0 ? (
           <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {filteredTerms.map((term) => (
-              <article key={term.slug} className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                <p className="text-xs tracking-widest text-cyan-100/80 uppercase">{term.category[locale]}</p>
+              <article
+                key={term.slug}
+                className="rounded-2xl border border-white/10 bg-black/25 p-4"
+              >
+                <p className="text-xs tracking-widest text-cyan-100/80 uppercase">
+                  {term.category[locale]}
+                </p>
                 <h3 className="mt-2 text-lg font-medium">
                   {term.term[locale]}
                   {term.abbreviation ? (
-                    <span className="ml-2 text-sm font-normal text-white/60">({term.abbreviation})</span>
+                    <span className="ml-2 text-sm font-normal text-white/60">
+                      ({term.abbreviation})
+                    </span>
                   ) : null}
                 </h3>
                 <p className="mt-2 text-sm leading-7 text-white/80">{term.definition[locale]}</p>
@@ -314,9 +322,14 @@ export function KnowledgeExplorer({
           {filteredDomains.length > 0 ? (
             <div className="mt-5 space-y-4">
               {filteredDomains.map((domain) => (
-                <article key={domain.slug} className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                <article
+                  key={domain.slug}
+                  className="rounded-2xl border border-white/10 bg-black/25 p-4"
+                >
                   <h3 className="text-lg font-medium">{domain.name[locale]}</h3>
-                  <p className="mt-2 text-sm leading-7 text-white/80">{domain.description[locale]}</p>
+                  <p className="mt-2 text-sm leading-7 text-white/80">
+                    {domain.description[locale]}
+                  </p>
                   <ul className="mt-3 space-y-2">
                     {domain.keyAbilities.map((ability) => (
                       <li key={ability.en} className="flex gap-2 text-sm text-white/75">
@@ -341,7 +354,10 @@ export function KnowledgeExplorer({
           {filteredIndustries.length > 0 ? (
             <div className="mt-5 space-y-4">
               {filteredIndustries.map((item) => (
-                <article key={item.slug} className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                <article
+                  key={item.slug}
+                  className="rounded-2xl border border-white/10 bg-black/25 p-4"
+                >
                   <h3 className="text-lg font-medium">{item.industry[locale]}</h3>
                   <p className="mt-2 text-sm text-white/80">
                     {labels.painPoint}: {item.painPoint[locale]}
@@ -373,7 +389,10 @@ export function KnowledgeExplorer({
         {filteredCrossTopics.length > 0 ? (
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             {filteredCrossTopics.map((topic) => (
-              <article key={topic.slug} className="rounded-2xl border border-white/10 bg-black/25 p-4">
+              <article
+                key={topic.slug}
+                className="rounded-2xl border border-white/10 bg-black/25 p-4"
+              >
                 <h3 className="text-lg font-medium">{topic.name[locale]}</h3>
                 <p className="mt-2 text-sm leading-7 text-white/80">{topic.relevance[locale]}</p>
                 <ul className="mt-3 space-y-2">

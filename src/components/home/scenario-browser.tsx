@@ -112,7 +112,10 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   }, [locale, tools]);
 
-  const scenarioNames = useMemo(() => new Set(scenarios.map((scenario) => scenario.name)), [scenarios]);
+  const scenarioNames = useMemo(
+    () => new Set(scenarios.map((scenario) => scenario.name)),
+    [scenarios],
+  );
 
   const selectedScenarios = useMemo(() => {
     const raw = searchParams.get('scenarios');
@@ -198,7 +201,9 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
   // Apply favorites-only filter (local state, not URL)
   const preSearchTools = useMemo(
     () =>
-      showFavoritesOnly ? advancedFilteredTools.filter((tool) => favorites.has(tool.slug)) : advancedFilteredTools,
+      showFavoritesOnly
+        ? advancedFilteredTools.filter((tool) => favorites.has(tool.slug))
+        : advancedFilteredTools,
     [advancedFilteredTools, favorites, showFavoritesOnly],
   );
 
@@ -258,7 +263,15 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
       hitMap,
       scoreMap,
     };
-  }, [preSearchTools, labels.matchInBackground, labels.matchInHighlights, labels.matchInTagline, labels.matchInTitle, locale, searchQuery]);
+  }, [
+    preSearchTools,
+    labels.matchInBackground,
+    labels.matchInHighlights,
+    labels.matchInTagline,
+    labels.matchInTitle,
+    locale,
+    searchQuery,
+  ]);
 
   const filteredTools = searchEvaluation.tools;
   const searchHitMap = searchEvaluation.hitMap;
@@ -267,7 +280,10 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
   const groupedByYear = useMemo(() => {
     const grouped = new Map<number, Tool[]>();
     for (const year of years) {
-      grouped.set(year, filteredTools.filter((tool) => tool.year === year));
+      grouped.set(
+        year,
+        filteredTools.filter((tool) => tool.year === year),
+      );
     }
     return grouped;
   }, [filteredTools, years]);
@@ -343,7 +359,15 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
           contributors: [...value.contributors].slice(0, 3),
         };
       });
-  }, [advancedFilteredTools, filteredTools.length, locale, scenarioFilteredTools, searchParams, selectedScenarios, tools]);
+  }, [
+    advancedFilteredTools,
+    filteredTools.length,
+    locale,
+    scenarioFilteredTools,
+    searchParams,
+    selectedScenarios,
+    tools,
+  ]);
 
   const visibleRecommendedTags = useMemo<RecommendedTag[]>(() => {
     if (recommendedTags.length === 0) {
@@ -412,11 +436,15 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
     <section className="mt-12 space-y-8">
       <div className="grid gap-3 md:grid-cols-2">
         <div className="rounded-2xl border border-cyan-300/20 bg-cyan-300/8 p-4">
-          <p className="text-xs tracking-[0.22em] text-cyan-100/80 uppercase">{labels.quickFlowTitle}</p>
+          <p className="text-xs tracking-[0.22em] text-cyan-100/80 uppercase">
+            {labels.quickFlowTitle}
+          </p>
           <p className="mt-2 text-sm leading-7 text-white/80">{labels.quickFlowBody}</p>
         </div>
         <div className="rounded-2xl border border-violet-300/20 bg-violet-300/8 p-4">
-          <p className="text-xs tracking-[0.22em] text-violet-100/80 uppercase">{labels.proFlowTitle}</p>
+          <p className="text-xs tracking-[0.22em] text-violet-100/80 uppercase">
+            {labels.proFlowTitle}
+          </p>
           <p className="mt-2 text-sm leading-7 text-white/80">{labels.proFlowBody}</p>
         </div>
       </div>
@@ -427,7 +455,9 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
             key={stat.year}
             className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.02] p-4"
           >
-            <p className="text-xs tracking-widest text-white/55 uppercase">{labels.yearStatsTitle}</p>
+            <p className="text-xs tracking-widest text-white/55 uppercase">
+              {labels.yearStatsTitle}
+            </p>
             <p className="mt-1 text-2xl font-semibold text-white">{stat.year}</p>
             <p className="mt-2 text-sm text-white/80">
               {labels.toolsMatched}: {stat.count}
@@ -543,7 +573,7 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
             value={searchQuery}
             onChange={(event) => updateSearchWithReset(event.target.value)}
             placeholder={labels.searchPlaceholder}
-            className="w-full rounded-xl border border-white/15 bg-black/25 px-3 py-2 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-cyan-300/60"
+            className="w-full rounded-xl border border-white/15 bg-black/25 px-3 py-2 text-sm text-white transition outline-none placeholder:text-white/40 focus:border-cyan-300/60"
           />
           {searchQuery ? (
             <button
@@ -664,7 +694,9 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
           <p>{labels.noResults}</p>
           {visibleRecommendedTags.length > 0 ? (
             <div className="mt-4">
-              <p className="mb-2 text-xs tracking-widest text-white/55 uppercase">{labels.noResultHints}</p>
+              <p className="mb-2 text-xs tracking-widest text-white/55 uppercase">
+                {labels.noResultHints}
+              </p>
               <div className="mb-3 flex justify-center gap-2">
                 {recommendedTags.length > visibleRecommendedTags.length ? (
                   <button
@@ -690,7 +722,10 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
               </div>
               <div className="flex flex-wrap justify-center gap-3">
                 {visibleRecommendedTags.map((item) => (
-                  <div key={item.tag} className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-2">
+                  <div
+                    key={item.tag}
+                    className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-2"
+                  >
                     <button
                       type="button"
                       onClick={() => addRecommendedTag(item.tag)}
@@ -701,7 +736,9 @@ export function ScenarioBrowser({ locale, tools, years, labels }: ScenarioBrowse
                     <p className="mt-1 max-w-56 text-[11px] text-white/55">
                       {item.reasons.length > 0
                         ? `${labels.recommendBecause} ${item.reasons
-                            .map((r, i) => (item.reasonPcts[i] < 100 ? `${r} (${item.reasonPcts[i]}%)` : r))
+                            .map((r, i) =>
+                              item.reasonPcts[i] < 100 ? `${r} (${item.reasonPcts[i]}%)` : r,
+                            )
                             .join(' + ')}`
                         : labels.recommendFallback}
                     </p>

@@ -7,22 +7,22 @@ const toolFilters = {
     difficulty: 'intermediate',
     communitySize: 'large',
   },
-  'autogpt': {
+  autogpt: {
     tags: ['ai-agent', 'autonomous', 'workflow'],
     difficulty: 'advanced',
     communitySize: 'large',
   },
-  'chatglm2': {
+  chatglm2: {
     tags: ['language-model', 'generative', 'chinese'],
     difficulty: 'beginner',
     communitySize: 'large',
   },
-  'sdxl': {
+  sdxl: {
     tags: ['image-generation', 'generative', 'multimodal'],
     difficulty: 'beginner',
     communitySize: 'large',
   },
-  'langsmith': {
+  langsmith: {
     tags: ['development-tool', 'llm-ops', 'monitoring'],
     difficulty: 'intermediate',
     communitySize: 'medium',
@@ -32,17 +32,17 @@ const toolFilters = {
     difficulty: 'beginner',
     communitySize: 'large',
   },
-  'vicuna': {
+  vicuna: {
     tags: ['language-model', 'generative', 'instruction-tuned'],
     difficulty: 'beginner',
     communitySize: 'medium',
   },
-  'starcoder': {
+  starcoder: {
     tags: ['code-generation', 'language-model', 'developer-tool'],
     difficulty: 'intermediate',
     communitySize: 'medium',
   },
-  'falcon': {
+  falcon: {
     tags: ['language-model', 'generative', 'efficient'],
     difficulty: 'beginner',
     communitySize: 'large',
@@ -72,12 +72,12 @@ const toolFilters = {
     difficulty: 'intermediate',
     communitySize: 'large',
   },
-  'dify': {
+  dify: {
     tags: ['ai-platform', 'low-code', 'workflow-builder'],
     difficulty: 'beginner',
     communitySize: 'large',
   },
-  'gemma': {
+  gemma: {
     tags: ['language-model', 'generative', 'lightweight'],
     difficulty: 'beginner',
     communitySize: 'large',
@@ -97,7 +97,7 @@ const toolFilters = {
     difficulty: 'beginner',
     communitySize: 'medium',
   },
-  'groq': {
+  groq: {
     tags: ['inference-engine', 'fast', 'edge'],
     difficulty: 'intermediate',
     communitySize: 'medium',
@@ -107,7 +107,7 @@ const toolFilters = {
     difficulty: 'advanced',
     communitySize: 'large',
   },
-  'qwen3': {
+  qwen3: {
     tags: ['language-model', 'generative', 'multilingual'],
     difficulty: 'beginner',
     communitySize: 'large',
@@ -142,7 +142,7 @@ const toolFilters = {
     difficulty: 'beginner',
     communitySize: 'large',
   },
-  'smolagents': {
+  smolagents: {
     tags: ['ai-agent', 'lightweight', 'developer-tool'],
     difficulty: 'intermediate',
     communitySize: 'small',

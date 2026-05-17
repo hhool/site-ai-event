@@ -20,7 +20,7 @@ while ((match = toolObjectRegex.exec(content)) !== null) {
   const beforeDetail = match[1];
   const slug = match[2];
   const detailLine = match[3];
-  
+
   const filters = toolFilters[slug];
   if (!filters) {
     console.warn(`No filters for ${slug}`);

@@ -7,7 +7,11 @@ import { getTagDisplay } from '@/data/tag-labels';
 import { ExternalLinkPill } from '@/components/shared/external-link-pill';
 import { DetailContent } from '@/components/detail/detail-content';
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const locale = (await getLocale()) as 'en' | 'zh';
   const safeLocale = locale === 'zh' ? 'zh' : 'en';
@@ -133,7 +137,9 @@ export default async function ToolDetailPage({
         <p className="mt-4 text-white/75">{tool.tagline[safeLocale]}</p>
 
         <section className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md">
-          <h2 className="text-xs tracking-widest text-white/60 uppercase">{t('common.toolMeta')}</h2>
+          <h2 className="text-xs tracking-widest text-white/60 uppercase">
+            {t('common.toolMeta')}
+          </h2>
           <div className="mt-3 flex flex-wrap gap-2">
             <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1 text-xs text-white/80">
               {t('common.year')}: {tool.year}
@@ -150,7 +156,9 @@ export default async function ToolDetailPage({
             </span>
           </div>
 
-          <p className="mt-3 text-xs tracking-widest text-white/55 uppercase">{t('common.filterTags')}</p>
+          <p className="mt-3 text-xs tracking-widest text-white/55 uppercase">
+            {t('common.filterTags')}
+          </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {tool.tags.map((tag) => (
               <span

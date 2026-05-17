@@ -42,7 +42,9 @@ export default async function KnowledgePage() {
         </Link>
 
         <header className="mt-6 rounded-3xl border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-md md:px-10 md:py-14">
-          <p className="text-xs tracking-[0.24em] text-cyan-200/85 uppercase">{t('knowledge.pageEyebrow')}</p>
+          <p className="text-xs tracking-[0.24em] text-cyan-200/85 uppercase">
+            {t('knowledge.pageEyebrow')}
+          </p>
           <h1 className="mt-4 text-4xl font-semibold md:text-5xl">{t('knowledge.pageTitle')}</h1>
           <p className="mt-4 max-w-4xl text-base leading-8 text-white/80 md:text-lg">
             {t('knowledge.pageDescription')}
@@ -53,7 +55,10 @@ export default async function KnowledgePage() {
           <StatCard label={t('knowledge.statsConcepts')} value={knowledgeTerms.length} />
           <StatCard label={t('knowledge.statsDomains')} value={knowledgeDomains.length} />
           <StatCard label={t('knowledge.statsIndustries')} value={industryApplications.length} />
-          <StatCard label={t('knowledge.statsCrossDiscipline')} value={crossDisciplineTopics.length} />
+          <StatCard
+            label={t('knowledge.statsCrossDiscipline')}
+            value={crossDisciplineTopics.length}
+          />
         </div>
 
         <KnowledgeExplorer
